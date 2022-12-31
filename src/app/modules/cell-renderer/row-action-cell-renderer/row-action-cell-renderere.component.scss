@@ -1,0 +1,13 @@
+@mixin mat-icon-size($size, $font-size) {
+  .mat-icon-button {
+    width: $size;
+    height: $size;
+    line-height: $size;
+  }
+
+  .mat-icon {
+    font-size: $font-size;
+  }
+}
+
+@include mat-icon-size($size: 25px, $font-size: 20px);

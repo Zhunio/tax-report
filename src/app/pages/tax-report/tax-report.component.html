@@ -1,0 +1,15 @@
+<div class="mt-3 mx-4">
+  <div class="flex items-center">
+    <h1 class="text-lg flex-grow">Tax Reports</h1>
+
+    <button mat-icon-button color="primary" (click)="addTaxReport()">
+      <mat-icon class="text-green-500">add_circle</mat-icon>
+    </button>
+  </div>
+</div>
+
+<ag-grid-angular
+  class="ag-theme-material mt-2 mx-4 mb-2 mat-elevation-z8"
+  [gridOptions]="gridOptions"
+  [rowData]="taxReports$ | async"
+></ag-grid-angular>

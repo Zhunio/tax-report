@@ -1,0 +1,26 @@
+@use "@angular/material" as mat;
+
+$primary: mat.define-palette(mat.$indigo-palette);
+$accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$warn: mat.define-palette(mat.$red-palette);
+$theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+      warn: $warn,
+    ),
+  )
+);
+
+@function primary-color($hue: 500) {
+  @return map-get($primary, $hue);
+}
+
+@function accent-color($hue: 500) {
+  @return map-get($accent, $hue);
+}
+
+@function warn-color($hue: 500) {
+  @return map-get($warn, $hue);
+}
