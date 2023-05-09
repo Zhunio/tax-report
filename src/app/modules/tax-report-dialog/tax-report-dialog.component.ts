@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FilePondFile, FilePondOptions } from 'filepond';
-import { ɵa as FilePondComponent } from 'ngx-filepond';
+import { FilePondComponent } from 'ngx-filepond';
 import { DialogClosedAddTaxReport, PondOtionsLabels } from 'src/app/models';
 import {
   getDefaultEndDate,

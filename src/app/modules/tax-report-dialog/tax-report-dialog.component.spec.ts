@@ -1,7 +1,7 @@
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSelect } from '@angular/material/select';
 import { byText, createComponentFactory, Spectator } from '@ngneat/spectator';
-import { ɵa as FilePondComponent } from 'ngx-filepond';
+import { FilePondComponent } from 'ngx-filepond';
 
 import { TaxReportModule } from 'src/app/pages/tax-report/tax-report.module';
 
