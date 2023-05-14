@@ -1,14 +1,14 @@
-import { MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatSelect } from '@angular/material/select';
-import { byText, createComponentFactory, Spectator } from '@ngneat/spectator';
+import { Spectator, byText, createComponentFactory } from '@ngneat/spectator';
 import { FilePondComponent } from 'ngx-filepond';
 
 import { TaxReportModule } from 'src/app/pages/tax-report/tax-report.module';
 
 import { MatOption } from '@angular/material/core';
 import { FilePond, FilePondFile } from 'filepond';
-import { provideAutoSpy, Spy } from 'jasmine-auto-spies';
-import { PondOtionsLabels } from 'src/app/models';
+import { Spy, provideAutoSpy } from 'jasmine-auto-spies';
+import { TaxReportDialogError } from 'src/app/models';
 import { TaxReportDialogComponent } from './tax-report-dialog.component';
 
 describe('TaxReportDialogComponent', () => {
@@ -37,7 +37,7 @@ describe('TaxReportDialogComponent', () => {
 
   beforeEach(() => {
     spectator = createComponent({
-      providers: [provideAutoSpy(MatDialogRef)],
+      providers: [provideAutoSpy(MatDialogRef), { provide: MAT_DIALOG_DATA, useValue: {} }],
     });
     component = spectator.component;
     dialogRef = spectator.inject<any>(MatDialogRef);
@@ -180,17 +180,19 @@ describe('TaxReportDialogComponent', () => {
           file: new File([''], 'report.xlsx', { type: '' }),
         } as unknown as FilePondFile;
 
-        const expectedCloseValue = {
-          fiscalQuarter: component.fiscalQuarter.value,
-          fiscalYear: component.fiscalYear.value,
-          droppedFile: file.file,
-        };
-
         component.pondFile = file;
 
         spectator.click(saveChangesBtn);
 
-        expect(dialogRef.close).toHaveBeenCalledWith(expectedCloseValue);
+        expect(dialogRef.close).toHaveBeenCalledWith({
+          taxReport: {
+            fiscalQuarter: component.fiscalQuarter.value,
+            fiscalYear: component.fiscalYear.value,
+            fileName: jasmine.any(String),
+            fileDestination: jasmine.any(String),
+            uploadedFile: file.file as File,
+          },
+        });
       });
     });
   });
@@ -211,7 +213,7 @@ describe('TaxReportDialogComponent', () => {
 
         spectator.click(saveChangesBtn);
 
-        expect(pond.labelIdle).toEqual(PondOtionsLabels.NoFileProvidedError);
+        expect(pond.labelIdle).toEqual(TaxReportDialogError.NoFileProvided);
       });
     });
 
@@ -249,7 +251,7 @@ describe('TaxReportDialogComponent', () => {
 
         spectator.click(saveChangesBtn);
 
-        expect(pond.labelIdle).toEqual(PondOtionsLabels.UnsupportedFileProvidedError);
+        expect(pond.labelIdle).toEqual(TaxReportDialogError.UnsupportedFileProvided);
       });
     });
   });

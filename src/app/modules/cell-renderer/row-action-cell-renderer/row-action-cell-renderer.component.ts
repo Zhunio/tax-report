@@ -5,10 +5,10 @@ import { RowActionCellParams } from 'src/app/models/cell-renderer.model';
 @Component({
   selector: 'row-action-cell-renderer',
   template: `
-    <button mat-icon-button color="primary" (click)="editAction()">
-      <mat-icon>edit</mat-icon>
+    <button mat-icon-button color="primary" (click)="onDownloadRowAction()">
+      <mat-icon>cloud_download</mat-icon>
     </button>
-    <button mat-icon-button color="warn" (click)="deleteAction()">
+    <button mat-icon-button color="warn" (click)="onDeleteRowAction()">
       <mat-icon>delete</mat-icon>
     </button>
   `,
@@ -19,17 +19,18 @@ export class RowActionCellRendererComponent implements ICellRendererAngularComp 
 
   agInit(params: RowActionCellParams) {
     this.cellParams = params;
+    this.cellParams.eParentOfValue.classList.add('row-action-cell-renderer-parent');
   }
 
   refresh() {
     return true;
   }
 
-  editAction() {
-    this.cellParams.editAction(this.cellParams);
+  onDownloadRowAction() {
+    this.cellParams.onDownloadRowAction?.(this.cellParams);
   }
 
-  deleteAction() {
-    this.cellParams.deleteAction(this.cellParams);
+  onDeleteRowAction() {
+    this.cellParams.onDeleteRowAction?.(this.cellParams);
   }
 }

@@ -1,18 +1,37 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, of } from 'rxjs';
-import { MOCK_TAX_REPORTS } from 'src/app/models';
 
-import { AddTaxReport, TaxReport } from '../../models/tax-report.model';
+import { FileService } from 'src/app/services/file/file.service';
+import { environment } from 'src/environments/environment';
+import { TaxReport, TaxReportCreate } from '../../models/tax-report.model';
 
 @Injectable({ providedIn: 'root' })
 export class TaxReportService {
-  taxReports$ = new BehaviorSubject<TaxReport[]>(MOCK_TAX_REPORTS);
+  constructor(private http: HttpClient, private fileService: FileService) {}
 
-  addTaxReport(taxReport: AddTaxReport) {
-    const newTaxReport = { ...taxReport, id: this.taxReports$.value.length + 1 };
+  getTaxReports() {
+    return this.http.get<TaxReport[]>(`${environment.baseUrl}/tax-report`);
+  }
 
-    this.taxReports$.next([...this.taxReports$.value, newTaxReport]);
+  createTaxReport({
+    fiscalQuarter,
+    fiscalYear,
+    fileName,
+    fileDestination,
+    uploadedFile,
+  }: TaxReportCreate) {
+    const formData = new FormData();
 
-    return of(newTaxReport);
+    formData.append('fiscalQuarter', fiscalQuarter.toString());
+    formData.append('fiscalYear', fiscalYear.toString());
+    formData.append('fileName', fileName);
+    formData.append('fileDestination', fileDestination);
+    formData.append('file', uploadedFile);
+
+    return this.http.post(`${environment.baseUrl}/tax-report`, formData);
+  }
+
+  deleteTaxReport(taxReportId: number) {
+    return this.http.delete(`${environment.baseUrl}/tax-report/${taxReportId}`);
   }
 }

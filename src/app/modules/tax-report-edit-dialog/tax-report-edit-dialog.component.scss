@@ -1,0 +1,9 @@
+:host {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+::ng-deep .tax-report-edit-dialog {
+  width: 100%;
+  height: 80%;
+}

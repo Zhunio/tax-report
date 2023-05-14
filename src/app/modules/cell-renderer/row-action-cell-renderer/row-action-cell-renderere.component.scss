@@ -10,4 +10,18 @@
   }
 }
 
+@mixin mat-icon-center() {
+  ::ng-deep .row-action-cell-renderer-parent,
+  ::ng-deep row-action-cell-renderer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  ::ng-deep row-action-cell-renderer button {
+    height: 22px;
+  }
+}
+
 @include mat-icon-size($size: 25px, $font-size: 20px);
+@include mat-icon-center();

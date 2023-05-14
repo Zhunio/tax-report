@@ -3,7 +3,12 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FilePondFile, FilePondOptions } from 'filepond';
 import { FilePondComponent } from 'ngx-filepond';
-import { DialogClosedAddTaxReport, PondOtionsLabels } from 'src/app/models';
+
+import {
+  TaxReportCreateDialogResult,
+  TaxReportDialogError,
+  TaxReportDialogLabel,
+} from 'src/app/models';
 import {
   getDefaultEndDate,
   getDefaultStartDate,
@@ -19,7 +24,7 @@ import {
 })
 export class TaxReportDialogComponent {
   constructor(
-    private dialogRef: MatDialogRef<TaxReportDialogComponent, DialogClosedAddTaxReport>
+    private dialogRef: MatDialogRef<TaxReportDialogComponent, TaxReportCreateDialogResult>
   ) {}
 
   @ViewChild(FilePondComponent) pond!: FilePondComponent;
@@ -32,7 +37,7 @@ export class TaxReportDialogComponent {
   fiscalYears = getFiscalYears(getDefaultStartDate(), getDefaultEndDate());
 
   pondOptions: FilePondOptions = {
-    labelIdle: PondOtionsLabels.DropFilesHere,
+    labelIdle: TaxReportDialogLabel.DropFilesHere,
   };
 
   hasFileError = false;
@@ -52,37 +57,54 @@ export class TaxReportDialogComponent {
   saveChanges(): void {
     this.updateHasFileError(this.pondFile);
 
-    if (!this.hasFileError) {
-      this.dialogRef.close({
+    if (this.hasFileError) {
+      return;
+    }
+
+    this.dialogRef.close({
+      taxReport: {
         fiscalQuarter: this.fiscalQuarter.value,
         fiscalYear: this.fiscalYear.value,
-        droppedFile: this.pondFile!.file as File,
-      });
-    }
+        fileName: this.getTaxReportFileName(),
+        fileDestination: this.getTaxReportFileDestination(),
+        uploadedFile: this.pondFile!.file as File,
+      },
+    });
+  }
+
+  private getTaxReportFileName() {
+    return `tax-report.xlsx`;
+  }
+
+  private getTaxReportFileDestination() {
+    return `/tax-reports/${this.fiscalYear.value}/Q${this.fiscalQuarter.value}`;
   }
 
   private updateHasFileError(file?: FilePondFile): void {
-    if (!file) {
-      return this.onNotFileProvidedError();
+    if (!this.fiscalYear.value) {
+      return this.onTaxReportDialogError(TaxReportDialogError.NoFiscalYearProvided);
+    } else if (!this.fiscalQuarter.value) {
+      return this.onTaxReportDialogError(TaxReportDialogError.NoFiscalQuarterProvided);
+    } else if (!this.getTaxReportFileDestination()) {
+      return this.onTaxReportDialogError(TaxReportDialogError.NoFileDestinationProvided);
+    } else if (!file) {
+      return this.onTaxReportDialogError(TaxReportDialogError.NoFileProvided);
     } else if (!isValidFileExtension(file.file as File)) {
-      return this.onNotValidFileExtension(file);
+      this.removeFile(file);
+      return this.onTaxReportDialogError(TaxReportDialogError.UnsupportedFileProvided);
     }
 
     this.hasFileError = false;
   }
 
-  private onNotFileProvidedError(): void {
+  private onTaxReportDialogError(taxReportDialogError: TaxReportDialogError): void {
     this.hasFileError = true;
     this.pond['pond'].setOptions({
-      labelIdle: PondOtionsLabels.NoFileProvidedError,
+      labelIdle: taxReportDialogError,
     });
   }
 
-  private onNotValidFileExtension(file: FilePondFile): void {
-    this.hasFileError = true;
+  private removeFile(file: FilePondFile): void {
     this.pond['pond'].removeFile(file);
-    this.pond['pond'].setOptions({
-      labelIdle: PondOtionsLabels.UnsupportedFileProvidedError,
-    });
   }
 }
