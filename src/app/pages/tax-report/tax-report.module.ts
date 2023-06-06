@@ -9,7 +9,6 @@ import { TaxReportDialogModule } from '../../modules/tax-report-dialog';
 import { TaxReportRoutingModule } from './tax-report-routing.module';
 
 import { TaxReportComponent } from './tax-report.component';
-import { TaxReportEditDialogModule } from '@/app/modules/tax-report-edit-dialog/tax-report-edit-dialog.module';
 
 @NgModule({
   declarations: [TaxReportComponent],
@@ -20,7 +19,6 @@ import { TaxReportEditDialogModule } from '@/app/modules/tax-report-edit-dialog/
     AgGridModule,
     CellRendererModule,
     TaxReportDialogModule,
-    TaxReportEditDialogModule,
     TaxReportRoutingModule,
   ],
 })

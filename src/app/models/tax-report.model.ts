@@ -1,3 +1,4 @@
+import { Payment } from '@/app/models/payment.model';
 import { File as IFile } from 'src/app/models/file.model';
 
 export interface TaxReport {
@@ -6,6 +7,7 @@ export interface TaxReport {
   fiscalYear: number;
   fileId: number | null;
   file: IFile;
+  payments: Payment[];
 }
 
 export interface TaxReportGrid extends TaxReport {

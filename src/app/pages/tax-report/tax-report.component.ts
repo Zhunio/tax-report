@@ -4,18 +4,16 @@ import {
   TaxReportCreateDialogResult,
   TaxReportGrid,
 } from '@/app/models';
-import { Payment } from '@/app/models/payment.model';
 import { RowActionCellRendererComponent, TaxReportDialogComponent } from '@/app/modules';
-import { TaxReportEditDialogComponent } from '@/app/modules/tax-report-edit-dialog/tax-report-edit-dialog.component';
 import { TaxReportService } from '@/app/services';
 import { FileService } from '@/app/services/file/file.service';
 
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { GridOptions, RowClickedEvent } from 'ag-grid-community';
-import { format, isDate } from 'date-fns';
-import { Workbook, Worksheet } from 'exceljs';
-import { BehaviorSubject, filter, firstValueFrom, map, switchMap, take, tap } from 'rxjs';
+import { Worksheet } from 'exceljs';
+import { BehaviorSubject, filter, map, switchMap, take, tap } from 'rxjs';
 
 @Component({
   selector: 'tax-report',
@@ -25,9 +23,10 @@ import { BehaviorSubject, filter, firstValueFrom, map, switchMap, take, tap } fr
 })
 export class TaxReportComponent implements OnInit {
   constructor(
+    private router: Router,
     private dialog: MatDialog,
-    private taxReportService: TaxReportService,
-    private fileService: FileService
+    private fileService: FileService,
+    private taxReportService: TaxReportService
   ) {}
 
   gridOptions: GridOptions = {
@@ -77,52 +76,7 @@ export class TaxReportComponent implements OnInit {
 
   async onRowClicked({ data }: RowClickedEvent<TaxReport>) {
     if (data) {
-      const fileBuffer = await firstValueFrom(this.fileService.getFileBuffer(data.file.id));
-      const workbook = await new Workbook().xlsx.load(fileBuffer.data);
-
-      const payments: Payment[] = [];
-      workbook.eachSheet?.((worksheet) => {
-        this.initColumns(worksheet);
-
-        worksheet.eachRow((row) => {
-          if (isDate(row.getCell('paymentDate').value)) {
-            const total = row.getCell('total').value as number;
-            const calculatedAmount = total / 1.08125;
-            const calculatedTax = calculatedAmount * 0.08125;
-            const calculatedTotal = calculatedAmount + calculatedTax;
-
-            const payment: Payment = {
-              paymentType: row.getCell('paymentType').value as string,
-              paymentDate: format(
-                new Date(row.getCell('paymentDate').value as string),
-                'MM/dd/yyyy'
-              ),
-              paymentNumber: row.getCell('paymentNumber').value as string,
-              customerName: row.getCell('customerName').value as string,
-              paymentMethod: row.getCell('paymentMethod').value as string,
-              total,
-              calculatedAmount,
-              calculatedTax,
-              calculatedTotal,
-            };
-
-            payments.push(payment);
-          }
-        });
-      });
-
-      this.dialog
-        .open<TaxReportEditDialogComponent, { payments: Payment[] }>(TaxReportEditDialogComponent, {
-          data: { payments },
-          panelClass: 'tax-report-edit-dialog',
-        })
-        .afterClosed()
-        .pipe(
-          take(1),
-          filter(Boolean),
-          switchMap(() => this.reloadTaxReports())
-        )
-        .subscribe();
+      this.router.navigate(['tax-report', data.id]);
     }
   }
 
