@@ -7,6 +7,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/tax-report/tax-report.module').then((m) => m.TaxReportModule),
   },
   {
+    path: 'tax-report/:taxReportId',
+    loadChildren: () => import('./pages/payment/payment.module').then((m) => m.PaymentModule),
+  },
+  {
     path: '',
     redirectTo: '/tax-report',
     pathMatch: 'full',
