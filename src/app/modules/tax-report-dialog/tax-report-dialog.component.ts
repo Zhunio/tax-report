@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { UntypedFormControl, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
 import { FilePondFile, FilePondOptions } from 'filepond';
 import { FilePondComponent } from 'ngx-filepond';
 

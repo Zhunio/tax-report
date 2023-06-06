@@ -1,4 +1,4 @@
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
 import { ICellRendererParams } from 'ag-grid-community';
 
 export interface RowActionCellParams<Data = unknown> extends ICellRendererParams<Data> {

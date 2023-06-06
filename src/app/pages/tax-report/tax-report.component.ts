@@ -9,7 +9,7 @@ import { TaxReportService } from '@/app/services';
 import { FileService } from '@/app/services/file/file.service';
 
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { Router } from '@angular/router';
 import { GridOptions, RowClickedEvent } from 'ag-grid-community';
 import { Worksheet } from 'exceljs';

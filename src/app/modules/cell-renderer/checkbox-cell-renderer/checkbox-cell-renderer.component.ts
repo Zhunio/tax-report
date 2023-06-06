@@ -1,6 +1,6 @@
 import { CheckboxCellRendererParams } from '@/app/models';
 import { Component } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material/checkbox';
+import { MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({

@@ -1,11 +1,11 @@
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSelect } from '@angular/material/select';
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from '@angular/material/legacy-dialog';
+import { MatLegacySelect as MatSelect } from '@angular/material/legacy-select';
 import { Spectator, byText, createComponentFactory } from '@ngneat/spectator';
 import { FilePondComponent } from 'ngx-filepond';
 
 import { TaxReportModule } from 'src/app/pages/tax-report/tax-report.module';
 
-import { MatOption } from '@angular/material/core';
+import { MatLegacyOption as MatOption } from '@angular/material/legacy-core';
 import { FilePond, FilePondFile } from 'filepond';
 import { Spy, provideAutoSpy } from 'jasmine-auto-spies';
 import { TaxReportDialogError } from 'src/app/models';

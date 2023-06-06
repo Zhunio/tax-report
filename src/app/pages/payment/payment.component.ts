@@ -6,8 +6,8 @@ import {
 } from '@/app/pages/payment/payment.util';
 import { TaxReportService } from '@/app/services';
 import { Component, OnInit } from '@angular/core';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatLegacyCheckboxChange as MatCheckboxChange } from '@angular/material/legacy-checkbox';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
 import { ActivatedRoute } from '@angular/router';
 import * as currency from 'currency.js';
 import { parse } from 'date-fns';
