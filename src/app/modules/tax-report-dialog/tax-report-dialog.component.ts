@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FilePondFile, FilePondOptions } from 'filepond';
 import { FilePondComponent } from 'ngx-filepond';
@@ -29,8 +29,8 @@ export class TaxReportDialogComponent {
 
   @ViewChild(FilePondComponent) pond!: FilePondComponent;
 
-  fiscalQuarter = new FormControl(1, Validators.required);
-  fiscalYear = new FormControl(new Date().getFullYear(), Validators.required);
+  fiscalQuarter = new UntypedFormControl(1, Validators.required);
+  fiscalYear = new UntypedFormControl(new Date().getFullYear(), Validators.required);
   pondFile: FilePondFile | undefined = undefined;
 
   fiscalQuarters = getFiscalQuarters();
