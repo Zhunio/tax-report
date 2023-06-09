@@ -8,7 +8,7 @@ const routes: Routes = [
   },
   {
     path: 'tax-report/:taxReportId',
-    loadChildren: () => import('./pages/payment/payment.module').then((m) => m.PaymentModule),
+    loadComponent: () => import('./payment/payment-shell/payment-shell.component').then((mod) => mod.PaymentShellComponent),
   },
   {
     path: '',
