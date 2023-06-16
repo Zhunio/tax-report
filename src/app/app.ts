@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   template: `
     <mat-toolbar color="primary">
-      <span>Tax Report</span>
+      <span class="cursor-pointer" (click)="onTaxReportClicked()">Tax Report</span>
     </mat-toolbar>
     <router-outlet></router-outlet>
   `,
@@ -23,4 +23,10 @@ import { RouterModule } from '@angular/router';
   ],
   imports: [MatToolbarModule, RouterModule],
 })
-export class AppComponent {}
+export class AppComponent {
+  router = inject(Router);
+
+  onTaxReportClicked() {
+    this.router.navigate(['/']);
+  }
+}
