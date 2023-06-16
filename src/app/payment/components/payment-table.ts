@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   standalone: true,
@@ -29,7 +30,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
       </ng-container>
       <ng-container matColumnDef="name">
         <mat-header-cell *matHeaderCellDef>Customer Name</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{ row.name }} </mat-cell>
+        <mat-cell [matTooltip]="row.name" *matCellDef="let row"> {{ row.name }} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="price">
         <mat-header-cell *matHeaderCellDef>Price</mat-header-cell>
@@ -57,7 +58,23 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
       <mat-row *matRowDef="let row; columns: columns"></mat-row>
     </mat-table>
   `,
-  imports: [CommonModule, MatTableModule, MatCheckboxModule, CurrencyPipe],
+  styles: [
+    `
+      .mat-column-method {
+        flex: 0 1 80px;
+      }
+      .mat-column-type,
+      .mat-column-date,
+      .mat-column-number,
+      .mat-column-price,
+      .mat-column-tax,
+      .mat-column-total,
+      .mat-column-isExempt {
+        flex: 0 1 120px;
+      }
+    `,
+  ],
+  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatTooltipModule, CurrencyPipe],
 })
 export class PaymentTableComponent {
   paymentService = inject(PaymentService);
