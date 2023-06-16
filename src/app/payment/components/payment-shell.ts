@@ -11,9 +11,6 @@ import { MatIconModule } from '@angular/material/icon';
   template: `
     <div class="flex justify-end">
       <h1 class="flex-1 text-lg">Payments</h1>
-      <button mat-icon-button color="primary">
-        <mat-icon class="text-green-500">add_circle</mat-icon>
-      </button>
     </div>
 
     <payment-table class="overflow-auto shadow-md"></payment-table>
