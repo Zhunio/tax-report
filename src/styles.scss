@@ -1,8 +1,32 @@
-@use 'styles/ag-grid';
-@use 'styles/material';
-@use 'styles/filepond';
-@use 'styles/tailwind';
-@use 'styles/overrides';
+@use "@angular/material" as mat;
+@use "styles/filepond";
+@use "styles/tailwind";
+@use "styles/overrides";
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$tax-report-primary: mat.define-palette(mat.$indigo-palette);
+$tax-report-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$tax-report-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$tax-report-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $tax-report-primary,
+      accent: $tax-report-accent,
+      warn: $tax-report-warn,
+    ),
+  )
+);
+
+@include mat.all-component-themes($tax-report-theme);
