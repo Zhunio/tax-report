@@ -13,20 +13,19 @@ import { MatIconModule } from '@angular/material/icon';
       <h1 class="flex-1 text-lg">Payments</h1>
     </div>
 
-    <payment-table class="overflow-auto shadow-md"></payment-table>
+    <payment-table class="mat-elevation-z8"></payment-table>
 
     <div class="flex">
       <h1 class="flex-1 text-lg">Reports</h1>
     </div>
 
-    <report-table class="overflow-auto shadow-md"></report-table>
+    <report-table class="mat-elevation-z8"></report-table>
   `,
   styles: [
     `
       :host {
-        overflow: auto;
         display: grid;
-        grid-template-rows: auto 1fr auto auto;
+        grid-template-rows: auto auto auto auto;
         @apply px-4 py-4 gap-2;
       }
     `,

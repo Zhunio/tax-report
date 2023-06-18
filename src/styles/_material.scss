@@ -33,7 +33,7 @@ $tax-report-theme: mat.define-light-theme(
   )
 );
 
-@mixin mdc-row-odd() {
+.striped-rows {
   .mat-mdc-row:nth-child(odd) {
     background-color: var(--mdc-row-odd-color);
   }
@@ -56,6 +56,5 @@ $tax-report-theme: mat.define-light-theme(
 
 @include mat.all-component-themes($tax-report-theme);
 
-@include mdc-row-odd();
 @include mdc-row-hover();
 @include mdc-row-height();

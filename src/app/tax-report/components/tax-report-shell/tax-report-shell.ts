@@ -22,7 +22,7 @@ import { filter, map, switchMap, take, tap } from 'rxjs';
       </button>
     </div>
 
-    <mat-table class="overflow-auto shadow-md" [dataSource]="dataSource()">
+    <mat-table class="striped-rows mat-elevation-z8" [dataSource]="dataSource()">
       <ng-container matColumnDef="fiscalYear">
         <mat-header-cell *matHeaderCellDef>Fiscal Year</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{ row.fiscalYear }} </mat-cell>
@@ -39,10 +39,10 @@ import { filter, map, switchMap, take, tap } from 'rxjs';
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
         <mat-cell *matCellDef="let row">
           <button mat-icon-button color="primary" (click)="onDownloadRowActionClicked(row)">
-            <mat-icon>cloud_download</mat-icon>
+            <mat-icon class="scale-90">cloud_download</mat-icon>
           </button>
           <button mat-icon-button color="warn" (click)="onDeleteTaxReportClicked(row)">
-            <mat-icon>delete</mat-icon>
+            <mat-icon class="scale-90">delete</mat-icon>
           </button>
         </mat-cell>
       </ng-container>
@@ -55,9 +55,7 @@ import { filter, map, switchMap, take, tap } from 'rxjs';
   styles: [
     `
       :host {
-        display: grid;
-        grid-template-rows: auto 1fr;
-        @apply px-4 py-4 gap-2;
+        @apply px-4 py-4;
       }
 
       .mat-column-rowActions {
