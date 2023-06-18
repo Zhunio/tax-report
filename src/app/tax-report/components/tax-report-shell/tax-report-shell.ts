@@ -14,8 +14,8 @@ import { filter, map, switchMap, take, tap } from 'rxjs';
   selector: 'tax-report-shell',
   standalone: true,
   template: `
-    <div class="flex items-center">
-      <h1 class="text-lg flex-grow">Tax Reports</h1>
+    <div class="flex items-center mb-2">
+      <h1 class="text-lg flex-1">Tax Reports</h1>
 
       <button mat-icon-button color="primary" (click)="onCreateTaxReportClicked()">
         <mat-icon class="text-green-500">add_circle</mat-icon>

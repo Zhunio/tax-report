@@ -9,24 +9,24 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'payment-shell',
   standalone: true,
   template: `
-    <div class="flex justify-end">
+    <div class="flex justify-end mb-2">
       <h1 class="flex-1 text-lg">Payments</h1>
     </div>
 
-    <payment-table class="mat-elevation-z8"></payment-table>
+    <payment-table></payment-table>
 
-    <div class="flex">
+    <div class="flex mt-4 mb-2">
       <h1 class="flex-1 text-lg">Reports</h1>
     </div>
 
-    <report-table class="mat-elevation-z8"></report-table>
+    <report-table></report-table>
   `,
   styles: [
     `
       :host {
-        display: grid;
-        grid-template-rows: auto auto auto auto;
-        @apply px-4 py-4 gap-2;
+        /* display: grid; */
+        /* grid-template-rows: auto auto auto auto; */
+        @apply px-4 py-4;
       }
     `,
   ],

@@ -11,7 +11,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   standalone: true,
   selector: 'payment-table',
   template: `
-    <mat-table class="striped-rows" [dataSource]="dataSource()">
+    <mat-table class="striped-rows mat-elevation-z8" [dataSource]="dataSource()">
       <ng-container matColumnDef="type">
         <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
         <mat-cell *matCellDef="let row"> {{ row.type }} </mat-cell>
