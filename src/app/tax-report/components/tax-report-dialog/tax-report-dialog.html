@@ -1,38 +1,40 @@
-<div class="grid grid-cols-2 gap-3">
-  <!-- FISCAL QUARTER -->
-  <mat-form-field>
-    <mat-label>Fiscal Quarter</mat-label>
-    <mat-select [formControl]="fiscalQuarter">
-      <mat-option *ngFor="let fiscalQuarter of fiscalQuarters" [value]="fiscalQuarter">
-        {{ fiscalQuarter }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+<mat-dialog-content>
+  <div class="grid grid-cols-2 gap-3">
+    <!-- FISCAL QUARTER -->
+    <mat-form-field>
+      <mat-label>Fiscal Quarter</mat-label>
+      <mat-select [formControl]="fiscalQuarter">
+        <mat-option *ngFor="let fiscalQuarter of fiscalQuarters" [value]="fiscalQuarter">
+          {{ fiscalQuarter }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <!-- FISCAL YEAR -->
-  <mat-form-field>
-    <mat-label>Fiscal Year</mat-label>
-    <mat-select [formControl]="fiscalYear">
-      <mat-option *ngFor="let fiscalYear of fiscalYears" [value]="fiscalYear">
-        {{ fiscalYear }}
-      </mat-option>
-    </mat-select>
-  </mat-form-field>
+    <!-- FISCAL YEAR -->
+    <mat-form-field>
+      <mat-label>Fiscal Year</mat-label>
+      <mat-select [formControl]="fiscalYear">
+        <mat-option *ngFor="let fiscalYear of fiscalYears" [value]="fiscalYear">
+          {{ fiscalYear }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
-  <!-- FILE -->
-  <file-pond
-    class="col-span-2"
-    [class.file-error]="hasFileError"
-    [options]="pondOptions"
-    (onaddfile)="onPondAddFile($event.file)"
-  ></file-pond>
+    <!-- FILE -->
+    <file-pond
+      class="col-span-2"
+      [class.file-error]="hasFileError"
+      [options]="pondOptions"
+      (onaddfile)="onPondAddFile($event.file)"
+    ></file-pond>
 
-  <!-- DISREGARD CHANGES -->
-  <button mat-raised-button color="warn" class="flex-1" (click)="disregardChanges()">
-    Disregard Changes
-  </button>
-  <!-- SAVE CHANGES -->
-  <button mat-raised-button color="primary" class="flex-1" (click)="saveChanges()">
-    Save Changes
-  </button>
-</div>
+    <!-- DISREGARD CHANGES -->
+    <button mat-raised-button color="warn" class="flex-1" (click)="disregardChanges()">
+      Disregard Changes
+    </button>
+    <!-- SAVE CHANGES -->
+    <button mat-raised-button color="primary" class="flex-1" (click)="saveChanges()">
+      Save Changes
+    </button>
+  </div>
+</mat-dialog-content>

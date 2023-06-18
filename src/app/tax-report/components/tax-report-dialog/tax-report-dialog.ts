@@ -10,11 +10,13 @@ import {
   getFiscalYears,
   isValidFileExtension,
 } from '@/app/tax-report/utils/tax-teport-dialog';
+import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormControl, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
 import { FilePondFile, FilePondOptions } from 'filepond';
 import { FilePondComponent, FilePondModule } from 'ngx-filepond';
 
@@ -23,7 +25,15 @@ import { FilePondComponent, FilePondModule } from 'ngx-filepond';
   standalone: true,
   templateUrl: './tax-report-dialog.html',
   styleUrls: ['./tax-report-dialog.scss'],
-  imports: [FilePondModule, MatFormFieldModule, MatSelectModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    FilePondModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatDialogModule,
+  ],
 })
 export class TaxReportDialogComponent {
   constructor(
