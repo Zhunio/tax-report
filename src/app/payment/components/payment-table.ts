@@ -1,11 +1,29 @@
 import { Payment } from '@/app/api/models/payment.model';
 import { PaymentService } from '@/app/payment/services/payment';
-import { CurrencyPipe } from '../pipes/currency';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
+import { Component, Injectable, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { map } from 'rxjs';
+import { CurrencyPipe } from '../pipes/currency';
+
+@Injectable({ providedIn: 'root' })
+export class BreakpointService {
+  breakpointObserver = inject(BreakpointObserver);
+
+  isXSmall = this.isMatched(Breakpoints.XSmall);
+  isSmall = this.isMatched(Breakpoints.Small);
+  isMedium = this.isMatched(Breakpoints.Medium);
+  isLarge = this.isMatched(Breakpoints.Large);
+  isXLarge = this.isMatched(Breakpoints.XLarge);
+
+  isMatched(value: string | readonly string[]) {
+    return toSignal(this.breakpointObserver.observe(value).pipe(map(({ matches }) => matches)));
+  }
+}
 
 @Component({
   standalone: true,
@@ -54,23 +72,14 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         ></mat-cell>
       </ng-container>
 
-      <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
-      <mat-row *matRowDef="let row; columns: columns"></mat-row>
+      <mat-header-row *matHeaderRowDef="columns()"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: columns()"></mat-row>
     </mat-table>
   `,
   styles: [
     `
-      .mat-column-method {
-        flex: 0 1 80px;
-      }
-      .mat-column-type,
-      .mat-column-date,
-      .mat-column-number,
-      .mat-column-price,
-      .mat-column-tax,
-      .mat-column-total,
-      .mat-column-isExempt {
-        flex: 0 1 120px;
+      .mat-column-name {
+        flex: 2;
       }
     `,
   ],
@@ -78,11 +87,25 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class PaymentTableComponent {
   paymentService = inject(PaymentService);
+  breakpointService = inject(BreakpointService);
 
   payments = this.paymentService.payments;
   updatePaymentAction = this.paymentService.updatePaymentAction;
 
-  columns = ['type', 'date', 'number', 'method', 'name', 'price', 'tax', 'total', 'isExempt'];
+  columns = computed(() => {
+    if (this.breakpointService.isXSmall()) {
+      return ['name', 'price', 'tax', 'total', 'isExempt'];
+    } else if (this.breakpointService.isSmall()) {
+      return ['date', 'name', 'price', 'tax', 'total', 'isExempt'];
+    } else if (this.breakpointService.isMedium()) {
+      return ['type', 'date', 'number', 'method', 'name', 'price', 'tax', 'total', 'isExempt'];
+    } else if (this.breakpointService.isLarge()) {
+      return ['type', 'date', 'number', 'method', 'name', 'price', 'tax', 'total', 'isExempt'];
+    }
+
+    return ['type', 'date', 'number', 'method', 'name', 'price', 'tax', 'total', 'isExempt'];
+  });
+
   dataSource = computed(() => new MatTableDataSource(this.payments()));
 
   onCheckboxChange({ checked }: MatCheckboxChange, payment: Payment) {
