@@ -38,18 +38,10 @@ import { filter, map, switchMap, take, tap } from 'rxjs';
       <ng-container matColumnDef="rowActions">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
         <mat-cell *matCellDef="let row">
-          <button
-            mat-icon-button
-            color="primary"
-            (click)="$event.preventDefault(); onDownloadRowActionClicked(row)"
-          >
+          <button mat-icon-button color="primary" (click)="onDownloadRowActionClicked($event, row)">
             <mat-icon class="scale-90">cloud_download</mat-icon>
           </button>
-          <button
-            mat-icon-button
-            color="warn"
-            (click)="$event.preventDefault(); onDeleteTaxReportClicked(row)"
-          >
+          <button mat-icon-button color="warn" (click)="onDeleteTaxReportClicked($event, row)">
             <mat-icon class="scale-90">delete</mat-icon>
           </button>
         </mat-cell>
@@ -92,11 +84,13 @@ export class TaxReportShellComponent implements OnInit {
     this.createTaxReport().subscribe();
   }
 
-  onDownloadRowActionClicked(taxReport: TaxReport) {
+  onDownloadRowActionClicked(e: MouseEvent, taxReport: TaxReport) {
+    e.stopPropagation();
     this.downloadTaxReportFile(taxReport);
   }
 
-  onDeleteTaxReportClicked(taxReport: TaxReport) {
+  onDeleteTaxReportClicked(e: MouseEvent, taxReport: TaxReport) {
+    e.stopPropagation();
     this.deleteTaxReport(taxReport.id).subscribe();
   }
 
