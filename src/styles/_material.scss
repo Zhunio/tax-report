@@ -48,12 +48,14 @@ $tax-report-theme: mat.define-light-theme(
 
 @mixin mdc-row-height() {
   mat-table.mat-mdc-table mat-row.mat-mdc-row,
+  mat-table.mat-mdc-table tr.mat-row.mat-mdc-no-data-row,
   mat-table.mat-mdc-table mat-footer-row.mat-mdc-footer-row {
     height: var(--mdc-row-odd-height);
     min-height: var(--mdc-row-odd-height);
   }
 }
 
+@include mat.typography-hierarchy($typography-config);
 @include mat.all-component-themes($tax-report-theme);
 
 @include mdc-row-hover();

@@ -49,6 +49,9 @@ import { filter, map, switchMap, take, tap } from 'rxjs';
 
       <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
       <mat-row (click)="onRowClicked(row)" *matRowDef="let row; columns: columns"></mat-row>
+      <tr class="mat-row flex justify-center items-center" *matNoDataRow>
+        <td class="mat-cell mat-body" [attr.colSpan]="columns.length">No rows to show</td>
+      </tr>
     </mat-table>
   `,
   imports: [MatIconModule, MatTableModule, MatCheckboxModule, MatDialogModule],
