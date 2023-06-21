@@ -1,8 +1,4 @@
-@use 'styles/ag-grid';
-@use 'styles/material';
-@use 'styles/filepond';
-@use 'styles/tailwind';
-@use 'styles/overrides';
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@use "styles/material";
+@use "styles/filepond";
+@use "styles/tailwind";
+@use "styles/overrides";
