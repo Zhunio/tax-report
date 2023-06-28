@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { Router, RouterModule } from '@angular/router';
 
@@ -7,7 +8,7 @@ import { Router, RouterModule } from '@angular/router';
   standalone: true,
   template: `
     <mat-toolbar color="primary">
-      <span class="cursor-pointer" (click)="onTaxReportClicked()">Tax Report</span>
+      <button mat-button (click)="goHome()">Tax Report</button>
     </mat-toolbar>
     <router-outlet></router-outlet>
   `,
@@ -21,12 +22,12 @@ import { Router, RouterModule } from '@angular/router';
       }
     `,
   ],
-  imports: [MatToolbarModule, RouterModule],
+  imports: [MatToolbarModule, MatButtonModule, RouterModule],
 })
 export class AppComponent {
   router = inject(Router);
 
-  onTaxReportClicked() {
+  goHome() {
     this.router.navigate(['/']);
   }
 }
