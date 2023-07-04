@@ -1,8 +1,8 @@
 import { AppComponent } from '@/app/app.component';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 import { MatButtonHarness } from '@angular/material/button/testing';
 import { Router } from '@angular/router';
+import { MockBuilder, MockRender } from 'ng-mocks';
 
 describe('AppComponent', () => {
   beforeEach(() => MockBuilder(AppComponent));
