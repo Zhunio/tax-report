@@ -2,7 +2,7 @@ import { TaxReportCreateDialogResult } from '@/app/api/models/tax-report.model';
 import {
   TaxReportDialogError,
   TaxReportDialogLabel,
-} from '@/app/tax-report/models/tax-report-dialog';
+} from '@/app/tax-report/models/tax-report-dialog.model';
 import {
   getDefaultEndDate,
   getDefaultStartDate,
