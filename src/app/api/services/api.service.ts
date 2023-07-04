@@ -16,19 +16,11 @@ export class ApiService {
     return this.http.get<TaxReport[]>(`${environment.baseUrl}/tax-report`);
   }
 
-  createTaxReport({
-    fiscalQuarter,
-    fiscalYear,
-    fileName,
-    fileDestination,
-    uploadedFile,
-  }: TaxReportCreate) {
+  createTaxReport({ fiscalQuarter, fiscalYear, uploadedFile }: TaxReportCreate) {
     const formData = new FormData();
 
     formData.append('fiscalQuarter', fiscalQuarter.toString());
     formData.append('fiscalYear', fiscalYear.toString());
-    formData.append('fileName', fileName);
-    formData.append('fileDestination', fileDestination);
     formData.append('file', uploadedFile);
 
     return this.http.post(`${environment.baseUrl}/tax-report`, formData);

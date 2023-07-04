@@ -17,8 +17,6 @@ export interface TaxReportGrid extends TaxReport {
 export interface TaxReportCreate {
   fiscalQuarter: number;
   fiscalYear: number;
-  fileName: string;
-  fileDestination: string;
   uploadedFile: File;
 }
 

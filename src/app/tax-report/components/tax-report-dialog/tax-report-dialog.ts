@@ -13,10 +13,10 @@ import {
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormControl, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
 import { FilePondFile, FilePondOptions } from 'filepond';
 import { FilePondComponent, FilePondModule } from 'ngx-filepond';
 
@@ -78,19 +78,9 @@ export class TaxReportDialogComponent {
       taxReport: {
         fiscalQuarter: this.fiscalQuarter.value,
         fiscalYear: this.fiscalYear.value,
-        fileName: this.getTaxReportFileName(),
-        fileDestination: this.getTaxReportFileDestination(),
         uploadedFile: this.pondFile!.file as File,
       },
     });
-  }
-
-  private getTaxReportFileName() {
-    return `tax-report.xlsx`;
-  }
-
-  private getTaxReportFileDestination() {
-    return `/tax-reports/${this.fiscalYear.value}/Q${this.fiscalQuarter.value}`;
   }
 
   private updateHasFileError(file?: FilePondFile): void {
@@ -98,8 +88,6 @@ export class TaxReportDialogComponent {
       return this.onTaxReportDialogError(TaxReportDialogError.NoFiscalYearProvided);
     } else if (!this.fiscalQuarter.value) {
       return this.onTaxReportDialogError(TaxReportDialogError.NoFiscalQuarterProvided);
-    } else if (!this.getTaxReportFileDestination()) {
-      return this.onTaxReportDialogError(TaxReportDialogError.NoFileDestinationProvided);
     } else if (!file) {
       return this.onTaxReportDialogError(TaxReportDialogError.NoFileProvided);
     } else if (!isValidFileExtension(file.file as File)) {
