@@ -1,6 +1,6 @@
 import { TaxReport, TaxReportCreateDialogResult } from '@/app/api/models/tax-report.model';
-import { ApiService } from '@/app/api/services/api';
-import { FileService } from '@/app/api/services/file';
+import { ApiService } from '@/app/api/services/api.service';
+import { FileService } from '@/app/api/services/file.service';
 import { TaxReportDialogComponent } from '@/app/tax-report/components/tax-report-dialog/tax-report-dialog';
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';

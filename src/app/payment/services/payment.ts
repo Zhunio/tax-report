@@ -1,4 +1,4 @@
-import { ApiService } from '@/app/api/services/api';
+import { ApiService } from '@/app/api/services/api.service';
 import { Payment, PaymentUpdateDto } from '@/app/api/models/payment.model';
 import { mapToPriceTaxAndTotal, sortPaymentsByDate } from '@/app/payment/utils/array';
 import { calculateReport } from '@/app/payment/utils/report';

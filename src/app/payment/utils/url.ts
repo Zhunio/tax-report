@@ -1,4 +1,4 @@
-import { ApiService } from '@/app/api/services/api';
+import { ApiService } from '@/app/api/services/api.service';
 import { Injectable, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
