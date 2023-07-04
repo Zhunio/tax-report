@@ -1,6 +1,6 @@
 import { enableProdMode, importProvidersFrom } from '@angular/core';
 
-import { AppComponent } from '@/app/app';
+import { AppComponent } from '@/app/app.component';
 import { routes } from '@/app/routes';
 import { HttpClientModule } from '@angular/common/http';
 import { bootstrapApplication } from '@angular/platform-browser';
