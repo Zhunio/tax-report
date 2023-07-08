@@ -3,22 +3,16 @@ import {
   TaxReportDialogError,
   TaxReportDialogLabel,
 } from '@/app/tax-report/models/tax-report-dialog.model';
-import {
-  getDefaultEndDate,
-  getDefaultStartDate,
-  getFiscalQuarters,
-  getFiscalYears,
-  isValidFileExtension,
-} from '@/app/tax-report/utils/tax-report-dialog.util';
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormControl, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { FilePondFile, FilePondOptions } from 'filepond';
 import { FilePondComponent, FilePondModule } from 'ngx-filepond';
+import { TaxReportDialogService } from '../../services/tax-report-dialog.service';
 
 @Component({
   selector: 'tax-report-dialog',
@@ -37,29 +31,27 @@ import { FilePondComponent, FilePondModule } from 'ngx-filepond';
 })
 export class TaxReportDialogComponent {
   constructor(
+    private taxReportDialogService: TaxReportDialogService,
     private dialogRef: MatDialogRef<TaxReportDialogComponent, TaxReportCreateDialogResult>
   ) {}
 
   @ViewChild(FilePondComponent) pond!: FilePondComponent;
 
-  fiscalQuarter = new UntypedFormControl(1, Validators.required);
-  fiscalYear = new UntypedFormControl(new Date().getFullYear(), Validators.required);
+  fiscalQuarters = this.taxReportDialogService.fiscalQuarters;
+  fiscalQuarter = this.taxReportDialogService.fiscalQuarter;
+
+  fiscalYears = this.taxReportDialogService.fiscalYears;
+  fiscalYear = this.taxReportDialogService.fiscalYear;
+
   pondFile: FilePondFile | undefined = undefined;
-
-  fiscalQuarters = getFiscalQuarters();
-  fiscalYears = getFiscalYears(getDefaultStartDate(), getDefaultEndDate());
-
-  pondOptions: FilePondOptions = {
-    labelIdle: TaxReportDialogLabel.DropFilesHere,
-  };
-
+  pondOptions: FilePondOptions = { labelIdle: TaxReportDialogLabel.DropFilesHere };
   hasFileError = false;
 
-  onPondAddFile(file: FilePondFile): void {
-    this.updateHasFileError(file);
+  onPondAddFile(filePondFile: FilePondFile): void {
+    this.updateHasFileError(filePondFile);
 
     if (!this.hasFileError) {
-      this.pondFile = file;
+      this.pondFile = filePondFile;
     }
   }
 
@@ -76,22 +68,18 @@ export class TaxReportDialogComponent {
 
     this.dialogRef.close({
       taxReport: {
-        fiscalQuarter: this.fiscalQuarter.value,
-        fiscalYear: this.fiscalYear.value,
+        fiscalQuarter: this.fiscalQuarter(),
+        fiscalYear: this.fiscalYear(),
         uploadedFile: this.pondFile!.file as File,
       },
     });
   }
 
-  private updateHasFileError(file?: FilePondFile): void {
-    if (!this.fiscalYear.value) {
-      return this.onTaxReportDialogError(TaxReportDialogError.NoFiscalYearProvided);
-    } else if (!this.fiscalQuarter.value) {
-      return this.onTaxReportDialogError(TaxReportDialogError.NoFiscalQuarterProvided);
-    } else if (!file) {
+  private updateHasFileError(filePondFile?: FilePondFile): void {
+    if (!filePondFile) {
       return this.onTaxReportDialogError(TaxReportDialogError.NoFileProvided);
-    } else if (!isValidFileExtension(file.file as File)) {
-      this.removeFile(file);
+    } else if (!this.taxReportDialogService.isValidFileExtension(filePondFile.file as File)) {
+      this.removeFile(filePondFile);
       return this.onTaxReportDialogError(TaxReportDialogError.UnsupportedFileProvided);
     }
 
