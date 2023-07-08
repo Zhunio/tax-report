@@ -30,6 +30,9 @@ export interface TaxReportEdit {
   file?: File;
 }
 
-export interface TaxReportCreateDialogResult {
-  taxReport: TaxReportCreate;
-}
+export type TaxReportCreateDialogResult =
+  | {
+      taxReport: TaxReportCreate;
+    }
+  | null
+  | undefined;

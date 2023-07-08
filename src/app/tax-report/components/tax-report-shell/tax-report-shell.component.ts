@@ -8,7 +8,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { filter, map, switchMap, take, tap } from 'rxjs';
+import { filter, switchMap, take, tap } from 'rxjs';
 
 @Component({
   selector: 'tax-report-shell',
@@ -33,7 +33,7 @@ import { filter, map, switchMap, take, tap } from 'rxjs';
       </ng-container>
       <ng-container matColumnDef="fileName">
         <mat-header-cell *matHeaderCellDef>Filename</mat-header-cell>
-        <mat-cell *matCellDef="let row"> {{ row.fileName }} </mat-cell>
+        <mat-cell *matCellDef="let row"> {{ row.file.fileName }} </mat-cell>
       </ng-container>
       <ng-container matColumnDef="rowActions">
         <mat-header-cell *matHeaderCellDef></mat-header-cell>
@@ -97,42 +97,40 @@ export class TaxReportShellComponent implements OnInit {
     this.deleteTaxReport(taxReport.id).subscribe();
   }
 
-  async onRowClicked(taxReport: TaxReport) {
+  onRowClicked(taxReport: TaxReport) {
     this.router.navigate(['tax-report', taxReport.id]);
   }
 
-  private downloadTaxReportFile(taxReport: TaxReport) {
+  downloadTaxReportFile(taxReport: TaxReport) {
     const openedWindow = this.fileService.downloadFile(taxReport.file.id);
 
     if (!openedWindow || openedWindow.closed || typeof openedWindow.closed === 'undefined') {
       console.log(
-        'Oops... We could now download your file. Please try disabling your Pop-up blocker and try again'
+        'Oops... We could not download your file. Please try disabling your Pop-up blocker and try again'
       );
     }
   }
 
-  private reloadTaxReports() {
-    return this.apiService.getTaxReports().pipe(
-      map((taxReports) =>
-        taxReports.map((taxReport) => ({ ...taxReport, fileName: taxReport.file.fileName }))
-      ),
-      tap((taxReports) => this.taxReports.set(taxReports))
+  reloadTaxReports() {
+    return this.apiService
+      .getTaxReports()
+      .pipe(tap((taxReports) => this.taxReports.set(taxReports)));
+  }
+
+  createTaxReport() {
+    const dialogRef = this.dialog.open<TaxReportDialogComponent, void, TaxReportCreateDialogResult>(
+      TaxReportDialogComponent
+    );
+
+    return dialogRef.afterClosed().pipe(
+      take(1),
+      filter(Boolean),
+      switchMap(({ taxReport }) => this.apiService.createTaxReport(taxReport)),
+      switchMap(() => this.reloadTaxReports())
     );
   }
 
-  private createTaxReport() {
-    return this.dialog
-      .open<TaxReportDialogComponent, void, TaxReportCreateDialogResult>(TaxReportDialogComponent)
-      .afterClosed()
-      .pipe(
-        take(1),
-        filter(Boolean),
-        switchMap(({ taxReport }) => this.apiService.createTaxReport(taxReport)),
-        switchMap(() => this.reloadTaxReports())
-      );
-  }
-
-  private deleteTaxReport(taxReportId: number) {
+  deleteTaxReport(taxReportId: number) {
     return this.apiService
       .deleteTaxReport(taxReportId)
       .pipe(switchMap(() => this.reloadTaxReports()));

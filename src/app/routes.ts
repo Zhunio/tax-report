@@ -4,7 +4,7 @@ export const routes: Routes = [
   {
     path: 'tax-report',
     loadComponent: () =>
-      import('./tax-report/components/tax-report-shell/tax-report-shell').then(
+      import('./tax-report/components/tax-report-shell/tax-report-shell.component').then(
         (mod) => mod.TaxReportShellComponent
       ),
   },
