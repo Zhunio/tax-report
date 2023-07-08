@@ -23,8 +23,8 @@ import { FilePondComponent, FilePondModule } from 'ngx-filepond';
 @Component({
   selector: 'tax-report-dialog',
   standalone: true,
-  templateUrl: './tax-report-dialog.html',
-  styleUrls: ['./tax-report-dialog.scss'],
+  templateUrl: './tax-report-dialog.component.html',
+  styleUrls: ['./tax-report-dialog.component.scss'],
   imports: [
     CommonModule,
     ReactiveFormsModule,

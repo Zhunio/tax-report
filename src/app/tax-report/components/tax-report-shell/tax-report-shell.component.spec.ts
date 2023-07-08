@@ -14,7 +14,7 @@ import {
 import { ApiService } from '../../../api/services/api.service';
 import { FileService } from '../../../api/services/file.service';
 import { getMockTaxReports } from '../../mocks/tax-report.mocks';
-import { TaxReportDialogComponent } from '../tax-report-dialog/tax-report-dialog';
+import { TaxReportDialogComponent } from '../tax-report-dialog/tax-report-dialog.component';
 import { TaxReportShellComponent } from './tax-report-shell.component';
 
 describe('TaxReportShellComponent', () => {
