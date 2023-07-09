@@ -1,37 +1,10 @@
 @use "@angular/material" as mat;
-
-:root {
-  --mdc-row-odd-color: #fafafa;
-  --mdc-row-odd-hover-color: rgba(33, 150, 243, 0.1);
-  --mdc-row-odd-height: 32px;
-}
+@use "./colors";
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
 @include mat.core();
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue. Available color palettes: https://material.io/design/color/
-$tax-report-primary: mat.define-palette(mat.$indigo-palette);
-$tax-report-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
-$tax-report-warn: mat.define-palette(mat.$red-palette);
-
-$typography-config: mat.define-typography-config();
-
-// Create the theme object. A theme consists of configurations for individual
-// theming systems such as "color" or "typography".
-$tax-report-theme: mat.define-light-theme(
-  (
-    color: (
-      primary: $tax-report-primary,
-      accent: $tax-report-accent,
-      warn: $tax-report-warn,
-    ),
-    typography: $typography-config,
-  )
-);
 
 .striped-rows {
   .mat-mdc-row:nth-child(odd) {
@@ -55,8 +28,8 @@ $tax-report-theme: mat.define-light-theme(
   }
 }
 
-@include mat.typography-hierarchy($typography-config);
-@include mat.all-component-themes($tax-report-theme);
+@include mat.typography-hierarchy(colors.$typography-config);
+@include mat.all-component-themes(colors.$theme);
 
 @include mdc-row-hover();
 @include mdc-row-height();

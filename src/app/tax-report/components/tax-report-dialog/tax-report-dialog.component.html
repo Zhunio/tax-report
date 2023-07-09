@@ -3,9 +3,9 @@
     <!-- FISCAL QUARTER -->
     <mat-form-field>
       <mat-label>Fiscal Quarter</mat-label>
-      <mat-select [formControl]="fiscalQuarter">
-        <mat-option *ngFor="let fiscalQuarter of fiscalQuarters" [value]="fiscalQuarter">
-          {{ fiscalQuarter }}
+      <mat-select [value]="fiscalQuarter()" (valueChange)="fiscalQuarter.set($event)">
+        <mat-option *ngFor="let quarter of fiscalQuarters()" [value]="quarter">
+          {{ quarter }}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -13,9 +13,9 @@
     <!-- FISCAL YEAR -->
     <mat-form-field>
       <mat-label>Fiscal Year</mat-label>
-      <mat-select [formControl]="fiscalYear">
-        <mat-option *ngFor="let fiscalYear of fiscalYears" [value]="fiscalYear">
-          {{ fiscalYear }}
+      <mat-select [value]="fiscalYear()" (valueChange)="fiscalYear.set($event)">
+        <mat-option *ngFor="let year of fiscalYears()" [value]="year">
+          {{ year }}
         </mat-option>
       </mat-select>
     </mat-form-field>

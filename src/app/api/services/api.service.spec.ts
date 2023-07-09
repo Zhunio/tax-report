@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Spy, createSpyFromClass } from 'jasmine-auto-spies';
 import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
 import { environment } from '../../../environments/environment';
+import { getMockTaxReports } from '../../tax-report/mocks/tax-report.mocks';
 import { PaymentUpdateDto } from '../models/payment.model';
-import { TaxReport } from '../models/tax-report.model';
 import { ApiService } from './api.service';
 
 describe('ApiService', () => {
@@ -97,7 +97,3 @@ describe('ApiService', () => {
     });
   });
 });
-
-export function getMockTaxReports(): TaxReport[] {
-  return [{ id: 1, payments: [{ id: 1 }] } as TaxReport];
-}
