@@ -97,7 +97,7 @@ describe('TaxReportDialogComponent', () => {
       filePondFile = {} as FilePondFile;
     });
 
-    it('should be called when onaddfile event is emitted from file-pond element', () => {
+    it('should be called when file is uploaded', () => {
       spyOn(s.component, 'onPondAddFile');
 
       s.triggerEventHandler('file-pond', 'onaddfile', { file: filePondFile });
@@ -298,6 +298,16 @@ describe('TaxReportDialogComponent', () => {
       s.component['onTaxReportDialogError'](TaxReportDialogError.NoFileProvided);
 
       expect(s.component.hasFileError).toBeTrue();
+    });
+
+    it('should add .file-error class to file-pond element', () => {
+      spyOn(s.component.pond['pond'], 'setOptions');
+
+      s.component['onTaxReportDialogError'](TaxReportDialogError.NoFileProvided);
+      s.detectChanges();
+
+      const filePond = s.query('file-pond.file-error');
+      expect(filePond).not.toBeNull();
     });
 
     it('should call pond["pond"].setOptions({ labelIdle })', () => {
