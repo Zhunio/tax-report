@@ -1,27 +1,26 @@
 import { HttpClient } from '@angular/common/http';
-import { Spy, createSpyFromClass } from 'jasmine-auto-spies';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
+import { Spy, provideAutoSpy } from 'jasmine-auto-spies';
 import { environment } from '../../../environments/environment';
 import { getMockTaxReports } from '../../tax-report/mocks/tax-report.mocks';
 import { PaymentUpdateDto } from '../models/payment.model';
 import { ApiService } from './api.service';
 
 describe('ApiService', () => {
+  let s: SpectatorService<ApiService>;
   let service: ApiService;
   let mockHttp: Spy<HttpClient>;
 
-  beforeEach(() =>
-    MockBuilder(ApiService).provide({
-      provide: HttpClient,
-      useValue: createSpyFromClass(HttpClient),
-    })
-  );
+  const createService = createServiceFactory({
+    service: ApiService,
+    providers: [provideAutoSpy(HttpClient)],
+  });
 
-  beforeEach(() => MockRender());
+  beforeEach(() => (s = createService()));
 
   beforeEach(() => {
-    service = ngMocks.findInstance(ApiService);
-    mockHttp = ngMocks.findInstance(HttpClient) as Spy<HttpClient>;
+    service = s.inject(ApiService);
+    mockHttp = s.inject(HttpClient) as any;
   });
 
   it('should create', () => {
