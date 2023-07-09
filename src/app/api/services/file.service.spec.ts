@@ -1,25 +1,24 @@
-import { Spy, createSpyFromClass } from 'jasmine-auto-spies';
-import { FileService } from './file.service';
 import { HttpClient } from '@angular/common/http';
-import { MockBuilder, MockRender, ngMocks } from 'ng-mocks';
+import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
+import { Spy, provideAutoSpy } from 'jasmine-auto-spies';
 import { environment } from '../../../environments/environment';
+import { FileService } from './file.service';
 
 describe('FileService', () => {
+  let s: SpectatorService<FileService>;
   let service: FileService;
   let mockHttp: Spy<HttpClient>;
 
-  beforeEach(() =>
-    MockBuilder(FileService).provide({
-      provide: HttpClient,
-      useValue: createSpyFromClass(HttpClient),
-    })
-  );
+  const createService = createServiceFactory({
+    service: FileService,
+    providers: [provideAutoSpy(HttpClient)],
+  });
 
-  beforeEach(() => MockRender());
+  beforeEach(() => (s = createService()));
 
   beforeEach(() => {
-    service = ngMocks.findInstance(FileService);
-    mockHttp = ngMocks.findInstance(HttpClient) as Spy<HttpClient>;
+    service = s.inject(FileService);
+    mockHttp = s.inject(HttpClient) as any;
   });
 
   it('should create', () => {

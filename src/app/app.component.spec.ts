@@ -1,29 +1,27 @@
 import { AppComponent } from '@/app/app.component';
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-import { MatButtonHarness } from '@angular/material/button/testing';
 import { Router } from '@angular/router';
-import { MockBuilder, MockRender } from 'ng-mocks';
+import { Spectator, byText, createComponentFactory } from '@ngneat/spectator';
+import { provideAutoSpy } from 'jasmine-auto-spies';
 
 describe('AppComponent', () => {
-  beforeEach(() => MockBuilder(AppComponent));
+  let s: Spectator<AppComponent>;
+
+  const createComponent = createComponentFactory({
+    component: AppComponent,
+    providers: [provideAutoSpy(Router)],
+  });
+
+  beforeEach(() => (s = createComponent()));
 
   it('should create', async () => {
-    const fixture = MockRender(AppComponent);
-
-    expect(fixture.point.componentInstance).toBeDefined();
+    expect(s.component).toBeDefined();
   });
 
   describe('goHome()', () => {
     it('should navigate to home when `Tax Report` button is clicked', async () => {
-      const fixture = MockRender(AppComponent);
+      s.click(byText('Tax Report'));
 
-      const loader = TestbedHarnessEnvironment.loader(fixture);
-      const taxReportButton = await loader.getHarness(
-        MatButtonHarness.with({ text: 'Tax Report' })
-      );
-      await taxReportButton.click();
-
-      const router = fixture.point.injector.get(Router);
+      const router = s.inject(Router);
       expect(router.navigate).toHaveBeenCalledWith(['/']);
     });
   });
