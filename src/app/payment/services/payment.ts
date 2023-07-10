@@ -2,7 +2,7 @@ import { ApiService } from '@/app/api/services/api.service';
 import { Payment, PaymentUpdateDto } from '@/app/api/models/payment.model';
 import { mapToPriceTaxAndTotal, sortPaymentsByDate } from '@/app/payment/utils/array';
 import { calculateReport } from '@/app/payment/utils/report';
-import { UrlService } from '@/app/payment/utils/url';
+import { UrlService } from '@/app/payment/services/url.service';
 import { Injectable, computed, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Subject, combineLatest, filter, map, startWith, switchMap, tap } from 'rxjs';

@@ -1,4 +1,4 @@
-import { UrlService } from '@/app/payment/utils/url';
+import { UrlService } from '@/app/payment/services/url.service';
 import { PaymentTableComponent } from '@/app/payment/components/payment-table';
 import { PaymentService } from '@/app/payment/services/payment';
 import { ReportTableComponent } from '@/app/payment/components/report-table';
