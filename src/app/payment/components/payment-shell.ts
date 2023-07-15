@@ -1,6 +1,6 @@
-import { UrlService } from '@/app/payment/services/url.service';
+import { UrlService } from '@/app/payment/services/url/url.service';
 import { PaymentTableComponent } from '@/app/payment/components/payment-table';
-import { PaymentService } from '@/app/payment/services/payment';
+import { PaymentService } from '@/app/payment/services/payment/payment.service';
 import { ReportTableComponent } from '@/app/payment/components/report-table';
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';

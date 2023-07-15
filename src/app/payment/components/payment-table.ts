@@ -1,5 +1,5 @@
 import { Payment } from '@/app/api/models/payment.model';
-import { PaymentService } from '@/app/payment/services/payment';
+import { PaymentService } from '@/app/payment/services/payment/payment.service';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { Component, Injectable, computed, inject } from '@angular/core';
@@ -8,7 +8,7 @@ import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { map } from 'rxjs';
-import { CurrencyPipe } from '../pipes/currency';
+import { CurrencyPipe } from '../pipes/currency.pipe';
 
 @Injectable({ providedIn: 'root' })
 export class BreakpointService {
@@ -90,7 +90,6 @@ export class PaymentTableComponent {
   breakpointService = inject(BreakpointService);
 
   payments = this.paymentService.payments;
-  updatePaymentAction = this.paymentService.updatePaymentAction;
 
   columns = computed(() => {
     if (this.breakpointService.isXSmall()) {
@@ -109,7 +108,7 @@ export class PaymentTableComponent {
   dataSource = computed(() => new MatTableDataSource(this.payments()));
 
   onCheckboxChange({ checked }: MatCheckboxChange, payment: Payment) {
-    this.updatePaymentAction.next({
+    this.paymentService.updatePayment({
       paymentId: payment.id,
       update: { isExempt: checked },
     });
