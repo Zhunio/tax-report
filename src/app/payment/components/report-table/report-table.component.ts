@@ -1,8 +1,8 @@
-import { CurrencyPipe } from '../pipes/currency.pipe';
-import { PaymentService } from '@/app/payment/services/payment.service';
+import { PaymentService } from '@/app/payment/services/payment/payment.service';
 import { Component, computed, inject } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { ArrayService } from '../services/array/array.service';
+import { CurrencyPipe } from '../../pipes/currency/currency.pipe';
+import { ArrayService } from '../../services/array/array.service';
 
 @Component({
   standalone: true,

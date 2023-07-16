@@ -1,5 +1,5 @@
-import { CurrencyPipe } from '@angular/common';
 import { SpectatorPipe, createPipeFactory } from '@ngneat/spectator';
+import { CurrencyPipe } from './currency.pipe';
 
 describe('CurrencyPipe', () => {
   let s: SpectatorPipe<CurrencyPipe>;
