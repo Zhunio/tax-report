@@ -1,31 +1,32 @@
+import { ObserverSpy } from '@hirez_io/observer-spy';
 import { SpectatorService, createServiceFactory } from '@ngneat/spectator';
-import { Spy, createSpyFromClass, provideAutoSpy } from 'jasmine-auto-spies';
-import { Payment } from '../../../api/models/payment.model';
+import { Spy, createSpyFromClass } from 'jasmine-auto-spies';
+import { of } from 'rxjs';
+import { Payment, PaymentUpdateDto } from '../../../api/models/payment.model';
 import { TaxReport } from '../../../api/models/tax-report.model';
 import { ApiService } from '../../../api/services/api.service';
+import { ArrayService } from '../array/array.service';
 import { ReportService } from '../report/report.service';
 import { UrlService } from '../url/url.service';
 import { PaymentService } from './payment.service';
-import { ObserverSpy } from '@hirez_io/observer-spy';
-import { Subject } from 'rxjs';
-import { url } from 'inspector';
 
 describe('PaymentService', () => {
   let s: SpectatorService<PaymentService>;
   let apiService: Spy<ApiService>;
   let urlService: Spy<UrlService>;
+  let arrayService: Spy<ArrayService>;
   let reportService: Spy<ReportService>;
 
   let taxReportId: number;
   let payments: Payment[];
-
-  // let urlSubject: Subject<string | null>;
 
   const createService = createServiceFactory(PaymentService);
 
   beforeEach(() => {
     urlService = createSpyFromClass(UrlService);
     apiService = createSpyFromClass(ApiService);
+    arrayService = createSpyFromClass(ArrayService);
+    reportService = createSpyFromClass(ReportService);
   });
 
   beforeEach(() => {
@@ -43,14 +44,10 @@ describe('PaymentService', () => {
       providers: [
         { provide: UrlService, useValue: urlService },
         { provide: ApiService, useValue: apiService },
-        provideAutoSpy(ReportService),
+        { provide: ArrayService, useValue: arrayService },
+        { provide: ReportService, useValue: reportService },
       ],
     });
-  });
-
-  beforeEach(() => {
-    reportService = s.inject(ReportService) as any;
-    apiService = s.inject(ApiService) as any;
   });
 
   describe('on create', () => {
@@ -73,113 +70,117 @@ describe('PaymentService', () => {
     });
   });
 
-  // describe('selectors', () => {
-    // describe('taxReportId$', () => {
-    //   it('should ignore falsy values from route.paramMap()', () => {
-    //     const observerSpy = new ObserverSpy();
-    //     s.service._taxReportId.subscribe(observerSpy);
+  describe('selectors', () => {
+    describe('taxReportId$', () => {
+      it('should ignore falsy values from route.paramMap()', () => {
+        const observerSpy = new ObserverSpy();
+        s.service._taxReportId$.subscribe(observerSpy);
 
-    //     urlService.getUrlParam.and.nextWithValues([{ value: '' }, { value: null }]);
+        urlService.getUrlParam.and.nextWith('');
+        urlService.getUrlParam.and.nextWith(null);
 
-    //     expect(observerSpy.getValues()).toEqual([taxReportId]);
-    //   });
+        expect(observerSpy.getValues()).toEqual([taxReportId]);
+      });
 
-    //   it('should emit valid tax report ids', () => {
-    //     const observerSpy = new ObserverSpy();
-    //     s.service._taxReportId.subscribe(observerSpy);
+      it('should emit valid tax report ids', () => {
+        const observerSpy = new ObserverSpy();
+        s.service._taxReportId$.subscribe(observerSpy);
 
-    //     // urlService.getUrlParam.and.nextWith('2');
-    //     // urlService.getUrlParam.and.nextWith('3');
-    //     urlService.getUrlParam.and.nextWithValues([{ value: '2' }, { value: '3', delay: 2000 }]);
+        urlService.getUrlParam.and.nextWith('2');
+        urlService.getUrlParam.and.nextWith('3');
 
-    //     expect(observerSpy.getValues()).toEqual([taxReportId, 2]);
-    //   });
-    // });
+        expect(observerSpy.getValues()).toEqual([1, 2, 3]);
+      });
+    });
 
-    // describe('payments', () => {
-    //   it('should call sortPaymentsByDate(payments)', () => {
-    //     spyOn(s.service as any, 'sortPaymentsByDate').and.returnValue([]);
-    //     spyOn(s.service as any, 'mapPayments').and.returnValue([]);
+    describe('_payments', () => {
+      it('should have payments', () => {
+        expect(s.service._payments()).toEqual(payments);
+      });
+    });
 
-    //     s.service.payments();
+    describe('_sortedPayments', () => {
+      it('should call _sortPaymentsByDate(payments)', () => {
+        const payments = [] as Payment[];
+        s.service._payments.set(payments);
+        s.service._sortedPayments();
 
-    //     const payments = [] as Payment[];
-    //     s.service.patchState({ payments });
+        expect(arrayService.sortPaymentsByDate).toHaveBeenCalledWith(payments);
+      });
+    });
 
-    //     expect(s.service['sortPaymentsByDate']).toHaveBeenCalledWith(payments);
-    //   });
+    describe('_mappedPayments', () => {
+      it('should call arrayService.calculatePriceTaxAndTotal(payments)', () => {
+        arrayService.sortPaymentsByDate.and.returnValue([]);
+        arrayService.calculatePriceTaxAndTotal.and.returnValue([]);
 
-    //   it('should call mapPayments(payments)', () => {
-    //     spyOn(s.service as any, 'sortPaymentsByDate').and.returnValue([]);
-    //     spyOn(s.service as any, 'mapPayments').and.returnValue([]);
+        const payments = [] as Payment[];
+        s.service._payments.set(payments);
+        s.service._mappedPayments();
 
-    //     s.service.payments();
+        expect(arrayService.calculatePriceTaxAndTotal).toHaveBeenCalledWith(payments);
+      });
+    });
 
-    //     const payments = [] as Payment[];
-    //     s.service.patchState({ payments });
+    describe('_reports', () => {
+      it('should call reportService.calculateReport(payments)', () => {
+        arrayService.sortPaymentsByDate.and.returnValue([]);
+        arrayService.calculatePriceTaxAndTotal.and.returnValue([]);
 
-    //     expect(s.service['mapPayments']).toHaveBeenCalled();
-    //   });
-    // });
+        const payments = [] as Payment[];
+        s.service._payments.set(payments);
+        s.service.reports();
 
-    // describe('reports', () => {
-    //   it('should call reportService.calculateReport(payments)', () => {
-    //     s.service.reports();
-
-    //     const payments = [] as Payment[];
-    //     s.service.patchState({ payments });
-
-    //     expect(reportService.calculateReport).toHaveBeenCalledWith(payments);
-    //   });
-    // });
+        expect(reportService.calculateReport).toHaveBeenCalledWith(payments);
+      });
+    });
   });
 
-  // describe('effects', () => {
-  //   describe('reloadTaxReport()', () => {
-  //     let payments: Payment[];
+  describe('effects', () => {
+    describe('reloadTaxReport()', () => {
+      it('should call apiService.getTaxReportById(id)', () => {
+        apiService.getTaxReportById.calls.reset();
+        apiService.getTaxReportById.and.nextWith({ payments } as TaxReport);
 
-  //     beforeEach(() => {
-  //       urlSubject.next('1');
-  //       apiService.getTaxReportById.and.nextWith({ payments } as TaxReport);
-  //     });
+        s.service.reloadTaxReport().subscribe();
 
-  //     it('should call apiService.getTaxReportById(id)', () => {
-  //       s.service.reloadTaxReport();
+        expect(apiService.getTaxReportById).toHaveBeenCalledWith(taxReportId);
+      });
 
-  //       expect(apiService.getTaxReportById).toHaveBeenCalledWith(1);
-  //     });
+      it('should set _payments', () => {
+        apiService.getTaxReportById.calls.reset();
+        apiService.getTaxReportById.and.nextWith({ payments } as TaxReport);
 
-  //     it('should patchState({ payments })', () => {
-  //       spyOn(s.service, 'patchState');
+        s.service.reloadTaxReport();
 
-  //       s.service.reloadTaxReport();
+        expect(s.service._payments()).toEqual(payments);
+      });
+    });
 
-  //       expect(s.service.patchState).toHaveBeenCalledWith({ payments });
-  //     });
-  //   });
+    describe('updatePayment()', () => {
+      it('should call apiService.updateTaxReportPayment(id, paymentId, update)', () => {
+        const taxReport = {} as TaxReport;
+        apiService.updateTaxReportPayment.and.nextWith(taxReport);
 
-  //   describe('updatePayment()', () => {
-  //     beforeEach(() => {
-  //       spyOn(s.service, 'reloadTaxReport');
-  //       urlSubject.next('1');
-  //       apiService.updateTaxReportPayment.and.nextWith({} as Payment);
-  //     });
+        const paymentId = 1;
+        const update: PaymentUpdateDto = {};
+        s.service.updatePayment({ paymentId, update }).subscribe();
 
-  //     it('should call apiService.updateTaxReportPayment(id, paymentId, update)', () => {
-  //       const paymentId = 1;
-  //       const update: PaymentUpdateDto = {};
-  //       s.service.updatePayment({ paymentId, update });
+        expect(apiService.updateTaxReportPayment).toHaveBeenCalledWith(1, paymentId, update);
+      });
 
-  //       expect(apiService.updateTaxReportPayment).toHaveBeenCalledWith(1, paymentId, update);
-  //     });
+      it('should call reloadTaxReport()', () => {
+        spyOn(s.service, 'reloadTaxReport').and.returnValue(of());
 
-  //     it('should call reloadTaxReport()', () => {
-  //       const paymentId = 1;
-  //       const update: PaymentUpdateDto = {};
-  //       s.service.updatePayment({ paymentId, update });
+        const taxReport = {} as TaxReport;
+        apiService.updateTaxReportPayment.and.nextWith(taxReport);
 
-  //       expect(s.service.reloadTaxReport).toHaveBeenCalled();
-  //     });
-  //   });
-  // });
+        const paymentId = 1;
+        const update: PaymentUpdateDto = {};
+        s.service.updatePayment({ paymentId, update }).subscribe();
+
+        expect(s.service.reloadTaxReport).toHaveBeenCalled();
+      });
+    });
+  });
 });

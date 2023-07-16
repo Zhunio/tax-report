@@ -22,21 +22,21 @@ describe('ArrayService', () => {
   describe('calculatePriceTaxAndTotal()', () => {
     it('should call currencyService.calculatePrice(payment)', () => {
       const payment = {} as Payment;
-      s.service.calculatePriceTaxAndTotal(payment);
+      s.service.calculatePriceTaxAndTotal([payment]);
 
       expect(currencyService.calculatePrice).toHaveBeenCalledWith(payment);
     });
 
     it('should call currencyService.calculateTax(payment)', () => {
       const payment = {} as Payment;
-      s.service.calculatePriceTaxAndTotal(payment);
+      s.service.calculatePriceTaxAndTotal([payment]);
 
       expect(currencyService.calculateTax).toHaveBeenCalledWith(payment);
     });
 
     it('should call currencyService.calculateTax(payment)', () => {
       const payment = {} as Payment;
-      s.service.calculatePriceTaxAndTotal(payment);
+      s.service.calculatePriceTaxAndTotal([payment]);
 
       expect(currencyService.calculateTotal).toHaveBeenCalledWith(payment);
     });
@@ -45,7 +45,7 @@ describe('ArrayService', () => {
       currencyService.calculatePrice.and.returnValue('100.00');
 
       const payment = {} as Payment;
-      const { price } = s.service.calculatePriceTaxAndTotal(payment);
+      const [{ price }] = s.service.calculatePriceTaxAndTotal([payment]);
 
       expect(price).toEqual('100.00');
     });
@@ -54,7 +54,7 @@ describe('ArrayService', () => {
       currencyService.calculateTax.and.returnValue('8.13');
 
       const payment = {} as Payment;
-      const { tax } = s.service.calculatePriceTaxAndTotal(payment);
+      const [{ tax }] = s.service.calculatePriceTaxAndTotal([payment]);
 
       expect(tax).toEqual('8.13');
     });
@@ -63,7 +63,7 @@ describe('ArrayService', () => {
       currencyService.calculateTotal.and.returnValue('108.13');
 
       const payment = {} as Payment;
-      const { total } = s.service.calculatePriceTaxAndTotal(payment);
+      const [{ total }] = s.service.calculatePriceTaxAndTotal([payment]);
 
       expect(total).toEqual('108.13');
     });
@@ -82,7 +82,7 @@ describe('ArrayService', () => {
         { date: '03/01/1995' } as Payment,
       ];
 
-      const sortedPayments = payments.sort(s.service.sortPaymentsByDate);
+      const sortedPayments = s.service.sortPaymentsByDate(payments);
       expect(sortedPayments).toEqual(expectedPayments);
     });
   });

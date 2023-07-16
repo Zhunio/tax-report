@@ -8,22 +8,28 @@ import { CurrencyService } from '../currency/currency.service';
 export class ArrayService {
   constructor(private currencyService: CurrencyService) {}
 
-  calculatePriceTaxAndTotal(
-    payment: Payment
-  ): Payment & { price: string; tax: string; total: string } {
-    return {
-      ...payment,
-      price: this.currencyService.calculatePrice(payment),
-      tax: this.currencyService.calculateTax(payment),
-      total: this.currencyService.calculateTotal(payment),
-    };
+  calculatePriceTaxAndTotal(payments: Payment[]): Payment[] {
+    const mappedPayments = payments.map((payment) => {
+      return {
+        ...payment,
+        price: this.currencyService.calculatePrice(payment),
+        tax: this.currencyService.calculateTax(payment),
+        total: this.currencyService.calculateTotal(payment),
+      };
+    });
+
+    return mappedPayments;
   }
 
-  sortPaymentsByDate(a: Payment, b: Payment) {
-    return compareAsc(
-      parse(a.date, 'MM/dd/yyyy', new Date()),
-      parse(b.date, 'MM/dd/yyyy', new Date())
-    );
+  sortPaymentsByDate(payments: Payment[]) {
+    const sortedPayments = payments.sort((a, b) => {
+      return compareAsc(
+        parse(a.date, 'MM/dd/yyyy', new Date()),
+        parse(b.date, 'MM/dd/yyyy', new Date())
+      );
+    });
+
+    return sortedPayments;
   }
 
   sumTotal<T, K extends keyof T>(rows: T[], key: K) {
