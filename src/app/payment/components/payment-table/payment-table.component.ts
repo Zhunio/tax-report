@@ -8,7 +8,7 @@ import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { map } from 'rxjs';
-import { CurrencyPipe } from '../../pipes/currency.pipe';
+import { CurrencyPipe } from '../../pipes/currency/currency.pipe';
 
 @Injectable({ providedIn: 'root' })
 export class BreakpointService {
