@@ -1,9 +1,9 @@
 import { PaymentTableComponent } from '@/app/payment/components/payment-table/payment-table.component';
 import { ReportTableComponent } from '@/app/payment/components/report-table/report-table.component';
-import { PaymentService } from '@/app/payment/services/payment/payment.service';
-import { UrlService } from '@/app/payment/services/url/url.service';
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { PaymentService } from '../../services/payment/payment.service';
+import { ReportService } from '../../services/report/report.service';
 
 @Component({
   selector: 'payment-shell',
@@ -28,7 +28,7 @@ import { MatIconModule } from '@angular/material/icon';
       }
     `,
   ],
-  providers: [UrlService, PaymentService],
+  providers: [PaymentService, ReportService],
   imports: [MatIconModule, PaymentTableComponent, ReportTableComponent],
 })
 export class PaymentShellComponent {}

@@ -1,7 +1,7 @@
 import { Payment, PaymentUpdateDto } from '@/app/api/models/payment.model';
 import { ApiService } from '@/app/api/services/api.service';
 import { Injectable, computed, signal } from '@angular/core';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { ArrayService } from '../array/array.service';
 import { ReportService } from '../report/report.service';
 import { UrlService } from '../url/url.service';
@@ -17,10 +17,9 @@ export class PaymentService {
     this.reloadTaxReport().subscribe();
   }
 
-  _taxReportId$ = this.urlService.getUrlParam('taxReportId').pipe(
-    filter(Boolean),
-    map((taxReportId) => parseInt(taxReportId, 10))
-  );
+  _taxReportId$ = this.urlService
+    .getUrlParam('taxReportId')
+    .pipe(map((taxReportId) => parseInt(taxReportId!, 10)));
 
   _payments = signal<Payment[]>([]);
   _sortedPayments = computed(() => {

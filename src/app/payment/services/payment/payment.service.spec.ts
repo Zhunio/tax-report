@@ -72,17 +72,7 @@ describe('PaymentService', () => {
 
   describe('selectors', () => {
     describe('taxReportId$', () => {
-      it('should ignore falsy values from route.paramMap()', () => {
-        const observerSpy = new ObserverSpy();
-        s.service._taxReportId$.subscribe(observerSpy);
-
-        urlService.getUrlParam.and.nextWith('');
-        urlService.getUrlParam.and.nextWith(null);
-
-        expect(observerSpy.getValues()).toEqual([taxReportId]);
-      });
-
-      it('should emit valid tax report ids', () => {
+      it('should emit tax report id', () => {
         const observerSpy = new ObserverSpy();
         s.service._taxReportId$.subscribe(observerSpy);
 
