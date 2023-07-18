@@ -1,8 +1,8 @@
-import { CurrencyPipe } from '../pipes/currency';
-import { PaymentService } from '@/app/payment/services/payment';
-import { sumTotal } from '@/app/payment/utils/array';
+import { PaymentService } from '@/app/payment/services/payment/payment.service';
 import { Component, computed, inject } from '@angular/core';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { CurrencyPipe } from '../../pipes/currency/currency.pipe';
+import { ArrayService } from '../../services/array/array.service';
 
 @Component({
   standalone: true,
@@ -47,12 +47,19 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 })
 export class ReportTableComponent {
   paymentService = inject(PaymentService);
+  arrayService = inject(ArrayService);
 
   reports = this.paymentService.reports;
 
   columns = ['month', 'taxableSales', 'nonTaxableSales', 'netTaxableSales'];
   dataSource = computed(() => new MatTableDataSource(this.reports()));
-  taxableSalesTotal = computed(() => sumTotal(this.reports(), 'taxableSales'));
-  nonTaxableSalesTotal = computed(() => sumTotal(this.reports(), 'nonTaxableSales'));
-  netTaxableSalesTotal = computed(() => sumTotal(this.reports(), 'netTaxableSales'));
+  taxableSalesTotal = computed(() => {
+    return this.arrayService.sumTotal(this.reports(), 'taxableSales');
+  });
+  nonTaxableSalesTotal = computed(() => {
+    return this.arrayService.sumTotal(this.reports(), 'nonTaxableSales');
+  });
+  netTaxableSalesTotal = computed(() => {
+    return this.arrayService.sumTotal(this.reports(), 'netTaxableSales');
+  });
 }

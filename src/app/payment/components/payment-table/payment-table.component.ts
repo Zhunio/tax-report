@@ -1,29 +1,12 @@
 import { Payment } from '@/app/api/models/payment.model';
-import { PaymentService } from '@/app/payment/services/payment';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { PaymentService } from '@/app/payment/services/payment/payment.service';
 import { CommonModule } from '@angular/common';
-import { Component, Injectable, computed, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, computed } from '@angular/core';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { map } from 'rxjs';
-import { CurrencyPipe } from '../pipes/currency';
-
-@Injectable({ providedIn: 'root' })
-export class BreakpointService {
-  breakpointObserver = inject(BreakpointObserver);
-
-  isXSmall = this.isMatched(Breakpoints.XSmall);
-  isSmall = this.isMatched(Breakpoints.Small);
-  isMedium = this.isMatched(Breakpoints.Medium);
-  isLarge = this.isMatched(Breakpoints.Large);
-  isXLarge = this.isMatched(Breakpoints.XLarge);
-
-  isMatched(value: string | readonly string[]) {
-    return toSignal(this.breakpointObserver.observe(value).pipe(map(({ matches }) => matches)));
-  }
-}
+import { CurrencyPipe } from '../../pipes/currency/currency.pipe';
+import { BreakpointService } from '../../../services/breakpoint.service';
 
 @Component({
   standalone: true,
@@ -74,6 +57,9 @@ export class BreakpointService {
 
       <mat-header-row *matHeaderRowDef="columns()"></mat-header-row>
       <mat-row *matRowDef="let row; columns: columns()"></mat-row>
+      <tr class="mat-row flex justify-center items-center" *matNoDataRow>
+        <td class="mat-cell mat-body" [attr.colSpan]="columns.length">No rows to show</td>
+      </tr>
     </mat-table>
   `,
   styles: [
@@ -86,11 +72,10 @@ export class BreakpointService {
   imports: [CommonModule, MatTableModule, MatCheckboxModule, MatTooltipModule, CurrencyPipe],
 })
 export class PaymentTableComponent {
-  paymentService = inject(PaymentService);
-  breakpointService = inject(BreakpointService);
-
-  payments = this.paymentService.payments;
-  updatePaymentAction = this.paymentService.updatePaymentAction;
+  constructor(
+    private paymentService: PaymentService,
+    private breakpointService: BreakpointService
+  ) {}
 
   columns = computed(() => {
     if (this.breakpointService.isXSmall()) {
@@ -106,12 +91,11 @@ export class PaymentTableComponent {
     return ['type', 'date', 'number', 'method', 'name', 'price', 'tax', 'total', 'isExempt'];
   });
 
-  dataSource = computed(() => new MatTableDataSource(this.payments()));
+  dataSource = computed(() => new MatTableDataSource(this.paymentService.payments()));
 
   onCheckboxChange({ checked }: MatCheckboxChange, payment: Payment) {
-    this.updatePaymentAction.next({
-      paymentId: payment.id,
-      update: { isExempt: checked },
-    });
+    this.paymentService
+      .updatePayment({ paymentId: payment.id, update: { isExempt: checked } })
+      .subscribe();
   }
 }

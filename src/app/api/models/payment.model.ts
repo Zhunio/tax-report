@@ -7,9 +7,9 @@ export interface Payment {
   name: string;
   amount: string;
   isExempt: boolean;
-  price: string;
-  tax: string;
-  total: string;
+  price?: string;
+  tax?: string;
+  total?: string;
 }
 
 export interface PaymentUpdateDto {

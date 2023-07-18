@@ -1,9 +1,10 @@
-import { UrlService } from '@/app/payment/utils/url';
-import { PaymentTableComponent } from '@/app/payment/components/payment-table';
-import { PaymentService } from '@/app/payment/services/payment';
-import { ReportTableComponent } from '@/app/payment/components/report-table';
+import { PaymentTableComponent } from '@/app/payment/components/payment-table/payment-table.component';
+import { ReportTableComponent } from '@/app/payment/components/report-table/report-table.component';
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { PaymentService } from '../../services/payment/payment.service';
+import { ReportService } from '../../services/report/report.service';
+import { UrlService } from '../../services/url/url.service';
 
 @Component({
   selector: 'payment-shell',
@@ -24,13 +25,11 @@ import { MatIconModule } from '@angular/material/icon';
   styles: [
     `
       :host {
-        /* display: grid; */
-        /* grid-template-rows: auto auto auto auto; */
         @apply px-4 py-4;
       }
     `,
   ],
-  providers: [UrlService, PaymentService],
+  providers: [PaymentService, ReportService, UrlService],
   imports: [MatIconModule, PaymentTableComponent, ReportTableComponent],
 })
 export class PaymentShellComponent {}
