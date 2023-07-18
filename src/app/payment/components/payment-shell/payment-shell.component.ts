@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { PaymentService } from '../../services/payment/payment.service';
 import { ReportService } from '../../services/report/report.service';
+import { UrlService } from '../../services/url/url.service';
 
 @Component({
   selector: 'payment-shell',
@@ -28,7 +29,7 @@ import { ReportService } from '../../services/report/report.service';
       }
     `,
   ],
-  providers: [PaymentService, ReportService],
+  providers: [PaymentService, ReportService, UrlService],
   imports: [MatIconModule, PaymentTableComponent, ReportTableComponent],
 })
 export class PaymentShellComponent {}
