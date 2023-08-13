@@ -26,7 +26,7 @@ describe('TaxReportComponent', () => {
 
   const createComponent = createComponentFactory({
     component: TaxReportComponent,
-    imports: [MatIconModule, MatTableModule, MatCheckboxModule, MatDialogModule,],
+    imports: [MatIconModule, MatTableModule, MatCheckboxModule, MatDialogModule],
     detectChanges: false,
   });
 
@@ -47,6 +47,7 @@ describe('TaxReportComponent', () => {
   });
 
   it('should render error notification if there is network request error', () => {
+    spyOn(console, 'error');
     apiServiceSpy.getTaxReports.and.returnValue(
       throwError(() => TaxReportErrorLabel.CouldNotReloadTaxReports)
     );
@@ -54,6 +55,7 @@ describe('TaxReportComponent', () => {
     s.detectChanges();
 
     expect(page.getCouldNotReloadTaxReportsErrorLabel()).toBeVisible();
+    expect(console.error).toHaveBeenCalledWith(TaxReportErrorLabel.CouldNotReloadTaxReports);
   });
 
   it('should render empty table', () => {
@@ -104,6 +106,7 @@ describe('TaxReportComponent', () => {
   });
 
   it('should render error notification if there is error creating tax report', () => {
+    spyOn(console, 'error');
     apiServiceSpy.getTaxReports.and.nextWith([]);
 
     s.detectChanges();
@@ -119,6 +122,7 @@ describe('TaxReportComponent', () => {
     page.clickCreateTaxReport();
 
     expect(page.getCouldNotCreateTaxReportErrorLabel()).toBeVisible();
+    expect(console.error).toHaveBeenCalledWith(TaxReportErrorLabel.CouldNotCreateTaxReport);
   });
 
   it('should download tax report', () => {
@@ -134,6 +138,7 @@ describe('TaxReportComponent', () => {
   });
 
   it('should render error notification if there is error downloading tax report', () => {
+    spyOn(console, 'error');
     const [taxReport] = getMockTaxReports();
     apiServiceSpy.getTaxReports.and.nextWith([taxReport]);
 
@@ -143,6 +148,7 @@ describe('TaxReportComponent', () => {
     page.clickRowDownloadButton(0);
 
     expect(page.getCouldNotDownloadTaxReportErrorLabel()).toBeVisible();
+    expect(console.error).toHaveBeenCalledWith(TaxReportErrorLabel.CouldNotDownloadTaxReport);
   });
 
   it('should delete tax report', () => {
@@ -160,6 +166,7 @@ describe('TaxReportComponent', () => {
   });
 
   it('should render error notification if there is error deleting tax report', () => {
+    spyOn(console, 'error');
     const [taxReport] = getMockTaxReports();
     apiServiceSpy.getTaxReports.and.nextWith([taxReport]);
 
@@ -173,5 +180,6 @@ describe('TaxReportComponent', () => {
     page.clickRowDeleteButton(0);
 
     expect(page.getCouldNotDeleteTaxReportErrorLabel()).toBeVisible();
+    expect(console.error).toHaveBeenCalledWith(TaxReportErrorLabel.CouldNotDeleteTaxReport);
   });
 });
