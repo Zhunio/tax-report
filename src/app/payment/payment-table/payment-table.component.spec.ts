@@ -7,6 +7,7 @@ import { MatCheckboxHarness } from '@angular/material/checkbox/testing';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Spectator, SpyObject, createComponentFactory, mockProvider } from '@ngneat/spectator';
+import { Observable } from 'rxjs';
 
 import { PaymentDto } from '@/app/shared/services/api/api.model';
 import { BreakpointService } from '@/app/shared/services/breakpoint/breakpoint.service';
@@ -215,12 +216,16 @@ describe('PaymentTableComponent', () => {
     });
 
     // Simulate payment being set to tax exempt
-    paymentService.updatePayment.and.callFake(() => {
-      paymentDto = { ...paymentDto, isExempt: true };
-      payments.set([calculatePriceTaxAndTotal(paymentDto)]);
-    });
+    paymentService.updatePayment.and.returnValue(
+      new Observable((observer) => {
+        paymentDto = { ...paymentDto, isExempt: true };
+        payments.set([calculatePriceTaxAndTotal(paymentDto)]);
 
-    // fix payment that had wrong price, tax, and total by 
+        observer.complete();
+      })
+    );
+
+    // fix payment that had wrong price, tax, and total by
     // making the payment tax exempt
     const checkbox = await loader.getHarness(MatCheckboxHarness);
     await checkbox.check();
