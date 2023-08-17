@@ -4,16 +4,11 @@ export const routes: Routes = [
   {
     path: 'tax-report',
     loadComponent: () =>
-      import('./tax-report/components/tax-report-shell/tax-report-shell.component').then(
-        (mod) => mod.TaxReportShellComponent
-      ),
+      import('./tax-report/tax-report.component').then((mod) => mod.TaxReportComponent),
   },
   {
     path: 'tax-report/:taxReportId',
-    loadComponent: () =>
-      import('./payment/components/payment-shell/payment-shell.component').then(
-        (mod) => mod.PaymentShellComponent
-      ),
+    loadComponent: () => import('./payment/payment.component').then((mod) => mod.PaymentComponent),
   },
   {
     path: '',

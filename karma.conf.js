@@ -34,8 +34,14 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ["ChromeHeadless"],
     singleRun: false,
     restartOnFileChange: true,
+    browsers: ["ChromeHeadless", "Chrome", "ChromeDebugging"],
+    customLaunchers: {
+      ChromeDebugging: {
+        base: "Chrome",
+        flags: ['--remote-debugging-port=9223'],
+      },
+    },
   });
 };

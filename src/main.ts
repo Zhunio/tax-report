@@ -1,12 +1,12 @@
+import { HttpClientModule } from '@angular/common/http';
 import { enableProdMode, importProvidersFrom } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideRouter } from '@angular/router';
 
 import { AppComponent } from '@/app/app.component';
 import { routes } from '@/app/routes';
-import { HttpClientModule } from '@angular/common/http';
-import { bootstrapApplication } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
 import { environment } from './environments/environment';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 if (environment.production) {
   enableProdMode();
@@ -14,7 +14,7 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
-    provideRouter(routes),
     importProvidersFrom(HttpClientModule, BrowserAnimationsModule),
+    provideRouter(routes),
   ],
 }).catch((err) => console.error(err));
