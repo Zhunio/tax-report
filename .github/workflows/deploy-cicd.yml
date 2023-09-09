@@ -26,6 +26,7 @@ jobs:
     secrets: inherit
     with:
       environment: Development
+      environmentUrl: https://tax-report-dev.zhunio-app.com
     uses: ./.github/workflows/deploy.yml
 
   deploy-prod:
@@ -35,5 +36,6 @@ jobs:
     secrets: inherit
     with:
       environment: Production
+      environmentUrl: https://tax-report.zhunio-app.com
     uses: ./.github/workflows/deploy.yml
     
