@@ -1,6 +1,10 @@
 name: Deploy CI/CD
 
 on:
+  push:
+    branches:
+      - main
+      - develop
   pull_request:
     branches: 
       - main
@@ -14,7 +18,11 @@ jobs:
   deploy-dev:
     name: Development
     needs: build
-    if: github.event.pull_request.merged
+    if: |
+      github.ref == 'refs/heads/main' || 
+      github.ref == 'refs/heads/develop' ||
+      github.base_ref == 'main' ||
+      github.base_ref == 'develop'
     secrets: inherit
     with:
       environment: Development
