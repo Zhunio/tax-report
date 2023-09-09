@@ -6,6 +6,7 @@ import { provideRouter } from '@angular/router';
 
 import { AppComponent } from '@/app/app.component';
 import { routes } from '@/app/routes';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { environment } from './environments/environment';
 
 if (environment.production) {
@@ -14,6 +15,7 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
+    { provide: LocationStrategy, useClass: HashLocationStrategy },
     importProvidersFrom(HttpClientModule, BrowserAnimationsModule),
     provideRouter(routes),
   ],
