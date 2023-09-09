@@ -2,7 +2,11 @@ on:
   workflow_call:
     inputs:
       environment:
-        description: "The environment to deploy"
+        description: "The environment"
+        type: string
+        required: true
+      environmentUrl:
+        description: "The environment url"
         type: string
         required: true
 
@@ -10,7 +14,9 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment: ${{ inputs.environment }}
+    environment:
+      name: ${{ inputs.environment }}
+      url: ${{ inputs.environmentUrl }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
