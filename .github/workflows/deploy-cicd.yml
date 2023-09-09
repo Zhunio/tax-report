@@ -14,7 +14,7 @@ jobs:
   deploy-dev:
     name: Development
     needs: build
-    if: github.event.pull_request.merged == 'true'
+    if: github.event.pull_request.merged
     secrets: inherit
     with:
       environment: Development
