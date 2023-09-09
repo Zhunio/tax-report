@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   template: `
     <mat-toolbar color="primary">
-      <span>Tax Report</span>
+      <button mat-button (click)="goHome()">Tax Report</button>
     </mat-toolbar>
     <router-outlet></router-outlet>
   `,
@@ -18,5 +22,12 @@ import { Component } from '@angular/core';
       }
     `,
   ],
+  imports: [MatToolbarModule, MatButtonModule, RouterModule],
 })
-export class AppComponent {}
+export class AppComponent {
+  router = inject(Router);
+
+  goHome() {
+    this.router.navigate(['/']);
+  }
+}
