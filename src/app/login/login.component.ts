@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
   selector: 'app-login',
   standalone: true,
   template: `login`,
-  styles: [``],
   imports: [CommonModule],
 })
 export class LoginComponent {}
