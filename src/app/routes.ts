@@ -11,6 +11,11 @@ export const routes: Routes = [
     loadComponent: () => import('./payment/payment.component').then((mod) => mod.PaymentComponent),
   },
   {
+    path: 'register',
+    loadComponent: () =>
+      import('./register/register.component').then((mod) => mod.RegisterComponent),
+  },
+  {
     path: '',
     redirectTo: '/tax-report',
     pathMatch: 'full',
