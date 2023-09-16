@@ -59,7 +59,7 @@ import { TaxReportErrorLabel } from './tax-report.enum';
       <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
       <mat-row (click)="onRowClicked(row)" *matRowDef="let row; columns: columns"></mat-row>
       <tr class="mat-row flex justify-center items-center" *matNoDataRow>
-        <td class="mat-cell mat-body" [attr.colSpan]="columns.length" *ngIf="!isLoading">
+        <td class="mat-cell mat-body" [attr.colSpan]="columns.length">
           <ng-container *ngIf="isLoading">Loading...</ng-container>
           <ng-container *ngIf="!isLoading">No rows to show</ng-container>
         </td>
