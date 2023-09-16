@@ -15,6 +15,7 @@ describe('ReportTableComponent', () => {
   let page: ReportTablePage;
 
   let payments: WritableSignal<Payment[]>;
+  let isLoading: WritableSignal<boolean>;
 
   const createComponent = createComponentFactory({
     component: ReportTableComponent,
@@ -23,11 +24,12 @@ describe('ReportTableComponent', () => {
 
   beforeEach(() => {
     payments = signal([]);
+    isLoading = signal(false);
   });
 
   beforeEach(() => {
     s = createComponent({
-      providers: [mockProvider(PaymentService, { payments })],
+      providers: [mockProvider(PaymentService, { payments, isLoading })],
     });
     page = new ReportTablePage(s);
   });

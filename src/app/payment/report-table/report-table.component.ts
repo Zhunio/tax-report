@@ -1,4 +1,6 @@
+import { NgIf } from '@angular/common';
 import { Component, computed } from '@angular/core';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
 import { CurrencyPipe } from '../../shared/pipes/currency/currency.pipe';
@@ -9,6 +11,7 @@ import { calculateReport, sumTotal } from './calculate-report';
   standalone: true,
   selector: 'report-table',
   template: `
+    <mat-progress-bar *ngIf="isLoading()" class="mb-1" mode="indeterminate"></mat-progress-bar>
     <mat-table class="mat-elevation-z8" [dataSource]="dataSource()">
       <ng-container matColumnDef="month">
         <mat-header-cell *matHeaderCellDef>Month</mat-header-cell>
@@ -42,16 +45,20 @@ import { calculateReport, sumTotal } from './calculate-report';
       <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: columns"></mat-row>
       <tr class="mat-row flex justify-center items-center" *matNoDataRow>
-        <td class="mat-cell mat-body" [attr.colSpan]="columns.length">No rows to show</td>
+        <td class="mat-cell mat-body" [attr.colSpan]="columns.length">
+          <ng-container *ngIf="isLoading()">Loading...</ng-container>
+          <ng-container *ngIf="!isLoading()">No rows to show</ng-container>
+        </td>
       </tr>
-      <mat-footer-row *matFooterRowDef="columns"></mat-footer-row>
+      <mat-footer-row [class.hidden]="isLoading()" *matFooterRowDef="columns"></mat-footer-row>
     </mat-table>
   `,
-  imports: [MatTableModule, CurrencyPipe],
+  imports: [NgIf, MatTableModule, CurrencyPipe, MatProgressBarModule],
 })
 export class ReportTableComponent {
   constructor(private readonly paymentService: PaymentService) {}
 
+  isLoading = this.paymentService.isLoading;
   columns = ['month', 'taxableSales', 'nonTaxableSales', 'netTaxableSales'];
   reports = computed(() => calculateReport(this.paymentService.payments()));
   dataSource = computed(() => new MatTableDataSource(this.reports()));

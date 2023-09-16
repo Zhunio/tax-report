@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { map, switchMap, tap } from 'rxjs';
+import { finalize, map, switchMap, tap } from 'rxjs';
 
 import { PaymentUpdateDto } from '../shared/services/api/api.model';
 import { ApiService } from '../shared/services/api/api.service';
@@ -18,7 +18,11 @@ export class PaymentService {
 
   payments = signal<Payment[]>([]);
 
+  isLoading = signal(false);
+
   reloadTaxReport() {
+    this.isLoading.set(true);
+
     return this._taxReportId$.pipe(
       switchMap((taxReportId) =>
         this.apiService.getTaxReportById(taxReportId!).pipe(
@@ -27,6 +31,7 @@ export class PaymentService {
             payments = payments.map(calculatePriceTaxAndTotal);
 
             this.payments.set(payments as Payment[]);
+            this.isLoading.set(false);
           })
         )
       )
@@ -34,9 +39,12 @@ export class PaymentService {
   }
 
   updatePayment({ paymentId, update }: { paymentId: number; update: PaymentUpdateDto }) {
+    this.isLoading.set(true);
+
     return this._taxReportId$.pipe(
       switchMap((taxReportId) => this.apiService.updatePayment(taxReportId!, paymentId, update)),
-      switchMap(() => this.reloadTaxReport())
+      switchMap(() => this.reloadTaxReport()),
+      finalize(() => this.isLoading.set(false))
     );
   }
 }
