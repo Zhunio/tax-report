@@ -1,14 +1,16 @@
+import { NgIf } from '@angular/common';
 import { Component, OnInit, computed, signal } from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { catchError, filter, of, switchMap, take, tap } from 'rxjs';
+import { catchError, filter, finalize, of, switchMap, take, tap } from 'rxjs';
 
 import { TaxReportDialogComponent } from '@/app/tax-report-dialog/tax-report-dialog.component';
 import { TaxReportCreateDialogResult } from '@/app/tax-report-dialog/tax-report-dialog.model';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TaxReportDto } from '../shared/services/api/api.model';
 import { ApiService } from '../shared/services/api/api.service';
 import { FileService } from '../shared/services/file/file.service';
@@ -26,6 +28,8 @@ import { TaxReportErrorLabel } from './tax-report.enum';
         <mat-icon class="text-green-500">add_circle</mat-icon>
       </button>
     </div>
+
+    <mat-progress-bar *ngIf="isLoading" class="mb-1" mode="indeterminate"></mat-progress-bar>
 
     <mat-table class="striped-rows mat-elevation-z8" [dataSource]="dataSource()">
       <ng-container matColumnDef="fiscalYear">
@@ -55,7 +59,10 @@ import { TaxReportErrorLabel } from './tax-report.enum';
       <mat-header-row *matHeaderRowDef="columns"></mat-header-row>
       <mat-row (click)="onRowClicked(row)" *matRowDef="let row; columns: columns"></mat-row>
       <tr class="mat-row flex justify-center items-center" *matNoDataRow>
-        <td class="mat-cell mat-body" [attr.colSpan]="columns.length">No rows to show</td>
+        <td class="mat-cell mat-body" [attr.colSpan]="columns.length" *ngIf="!isLoading">
+          <ng-container *ngIf="isLoading">Loading...</ng-container>
+          <ng-container *ngIf="!isLoading">No rows to show</ng-container>
+        </td>
       </tr>
     </mat-table>
   `,
@@ -71,7 +78,15 @@ import { TaxReportErrorLabel } from './tax-report.enum';
     `,
   ],
   providers: [ApiService, FileService, NotificationService],
-  imports: [MatIconModule, MatTableModule, MatCheckboxModule, MatDialogModule, MatSnackBarModule],
+  imports: [
+    NgIf,
+    MatIconModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatProgressBarModule,
+  ],
 })
 export class TaxReportComponent implements OnInit {
   constructor(
@@ -81,6 +96,8 @@ export class TaxReportComponent implements OnInit {
     private fileService: FileService,
     private notificationService: NotificationService
   ) {}
+
+  isLoading = false;
 
   columns = ['fiscalYear', 'fiscalQuarter', 'fileName', 'rowActions'];
   taxReports = signal<TaxReportDto[]>([]);
@@ -118,6 +135,8 @@ export class TaxReportComponent implements OnInit {
   }
 
   reloadTaxReports() {
+    this.isLoading = true;
+
     return this.apiService.getTaxReports().pipe(
       catchError(() => {
         console.error(TaxReportErrorLabel.CouldNotReloadTaxReports);
@@ -125,11 +144,16 @@ export class TaxReportComponent implements OnInit {
 
         return of([]);
       }),
-      tap((taxReports) => this.taxReports.set(taxReports))
+      tap((taxReports) => {
+        this.taxReports.set(taxReports);
+        this.isLoading = false;
+      })
     );
   }
 
   createTaxReport() {
+    this.isLoading = true;
+
     const dialogRef = this.dialog.open<TaxReportDialogComponent, void, TaxReportCreateDialogResult>(
       TaxReportDialogComponent
     );
@@ -147,11 +171,14 @@ export class TaxReportComponent implements OnInit {
           })
         )
       ),
-      switchMap(() => this.reloadTaxReports())
+      switchMap(() => this.reloadTaxReports()),
+      finalize(() => (this.isLoading = false))
     );
   }
 
   deleteTaxReport(taxReportId: number) {
+    this.isLoading = true;
+
     return this.apiService.deleteTaxReport(taxReportId).pipe(
       catchError(() => {
         console.error(TaxReportErrorLabel.CouldNotDeleteTaxReport);
@@ -159,7 +186,8 @@ export class TaxReportComponent implements OnInit {
 
         return of([]);
       }),
-      switchMap(() => this.reloadTaxReports())
+      switchMap(() => this.reloadTaxReports()),
+      tap(() => (this.isLoading = false))
     );
   }
 }
