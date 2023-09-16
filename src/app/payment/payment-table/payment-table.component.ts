@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed } from '@angular/core';
 import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
@@ -12,6 +13,8 @@ import { PaymentService } from '../payment.service';
   standalone: true,
   selector: 'payment-table',
   template: `
+    <mat-progress-bar *ngIf="isLoading()" class="mb-1" mode="indeterminate"></mat-progress-bar>
+
     <mat-table class="striped-rows mat-elevation-z8" [dataSource]="dataSource()">
       <ng-container matColumnDef="type">
         <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
@@ -58,7 +61,10 @@ import { PaymentService } from '../payment.service';
       <mat-header-row *matHeaderRowDef="columns()"></mat-header-row>
       <mat-row *matRowDef="let row; columns: columns()"></mat-row>
       <tr class="mat-row flex justify-center items-center" *matNoDataRow>
-        <td class="mat-cell mat-body" [attr.colSpan]="columns.length">No rows to show</td>
+        <td class="mat-cell mat-body" [attr.colSpan]="columns.length">
+          <ng-container *ngIf="isLoading()">Loading...</ng-container>
+          <ng-container *ngIf="!isLoading()">No rows to show</ng-container>
+        </td>
       </tr>
     </mat-table>
   `,
@@ -69,13 +75,21 @@ import { PaymentService } from '../payment.service';
       }
     `,
   ],
-  imports: [CommonModule, MatTableModule, MatCheckboxModule, MatTooltipModule],
+  imports: [
+    CommonModule,
+    MatTableModule,
+    MatCheckboxModule,
+    MatTooltipModule,
+    MatProgressBarModule,
+  ],
 })
 export class PaymentTableComponent {
   constructor(
     private readonly paymentService: PaymentService,
     private readonly breakpointService: BreakpointService
   ) {}
+
+  isLoading = this.paymentService.isLoading;
 
   dataSource = computed(() => new MatTableDataSource(this.paymentService.payments()));
 

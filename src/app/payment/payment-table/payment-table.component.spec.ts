@@ -23,6 +23,7 @@ describe('PaymentTableComponent', () => {
 
   let paymentService: SpyObject<PaymentService>;
   let payments: WritableSignal<Payment[]>;
+  let isLoading: WritableSignal<boolean>;
 
   let isXSmall: WritableSignal<boolean>;
   let isSmall: WritableSignal<boolean>;
@@ -38,6 +39,7 @@ describe('PaymentTableComponent', () => {
 
   beforeEach(() => {
     payments = signal([]);
+    isLoading = signal(false)
 
     isXSmall = signal(false);
     isSmall = signal(false);
@@ -48,7 +50,7 @@ describe('PaymentTableComponent', () => {
   beforeEach(() => {
     s = createComponent({
       providers: [
-        mockProvider(PaymentService, { payments }),
+        mockProvider(PaymentService, { payments, isLoading }),
         mockProvider(BreakpointService, { isXSmall, isSmall, isMedium, isLarge }),
       ],
     });
