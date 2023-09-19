@@ -56,10 +56,10 @@ describe('ReportTableComponent', () => {
     isLoading.set(true);
     s.detectChanges();
 
-    expect(page.getEmptyRowsLabel()).toBeVisible();
+    expect(page.getLoadingText()).toBeVisible();
 
     isLoading.set(false);
-    s.detectChanges(0;
+    s.detectChanges();
       
       expect(page.getLoadingText()).not.toBeVisible();
   })
