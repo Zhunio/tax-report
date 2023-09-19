@@ -11,7 +11,6 @@ import { calculateReport, sumTotal } from './calculate-report';
   standalone: true,
   selector: 'report-table',
   template: `
-    <mat-progress-bar *ngIf="isLoading()" class="mb-1" mode="indeterminate"></mat-progress-bar>
     <mat-table class="mat-elevation-z8" [dataSource]="dataSource()">
       <ng-container matColumnDef="month">
         <mat-header-cell *matHeaderCellDef>Month</mat-header-cell>
