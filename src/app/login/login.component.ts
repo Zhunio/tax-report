@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
+import { catchError, of, tap } from 'rxjs';
 import { AuthService } from '../shared/services/auth/auth.service';
 import { SessionStorageService } from '../shared/services/session-storage/session-storage.service';
 
@@ -49,7 +51,7 @@ import { SessionStorageService } from '../shared/services/session-storage/sessio
   providers: [AuthService, SessionStorageService],
 })
 export class LoginComponent {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private readonly router: Router) {}
 
   isLoading = false;
 
@@ -59,13 +61,15 @@ export class LoginComponent {
   login() {
     this.isLoading = true;
 
-    this.authService.login({ username: this.username, password: this.password }).subscribe({
-      next: () => {
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      },
-    });
+    this.authService
+      .login({ username: this.username, password: this.password })
+      .pipe(
+        catchError(() => of()),
+        tap(() => {
+          this.isLoading = false;
+          this.router.navigate(['/']);
+        })
+      )
+      .subscribe();
   }
 }
