@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SessionStorageKey, SessionStorageValue } from './session-storage.constant';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class SessionStorageService {
   constructor() {}
 

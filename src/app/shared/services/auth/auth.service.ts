@@ -4,9 +4,7 @@ import { Injectable } from '@angular/core';
 import { AuthResponse, Login, Register } from './auth.model';
 import { tap } from 'rxjs';
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable()
 export class AuthService {
   constructor(private readonly http: HttpClient) {}
 
