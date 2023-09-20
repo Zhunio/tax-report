@@ -3,8 +3,14 @@ import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
+import { catchError, of, tap } from 'rxjs';
+import { AuthErrorLabel } from '../shared/services/auth/auth.enum';
 import { AuthService } from '../shared/services/auth/auth.service';
+import { NotificationService } from '../shared/services/notification/notification.service';
 import { SessionStorageService } from '../shared/services/session-storage/session-storage.service';
+import { NgIf } from '@angular/common';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
@@ -24,13 +30,14 @@ import { SessionStorageService } from '../shared/services/session-storage/sessio
 
     <!-- REGISTER -->
     <button
-      [disabled]="!username || !password"
+      [disabled]="!username || !password || isLoading"
       mat-raised-button
       color="primary"
       class="flex-1"
       (click)="register()"
     >
-      Register
+      <ng-container *ngIf="isLoading">Loading...</ng-container>
+      <ng-container *ngIf="!isLoading">Register</ng-container>
     </button>
   `,
   styles: [
@@ -45,11 +52,15 @@ import { SessionStorageService } from '../shared/services/session-storage/sessio
       }
     `,
   ],
-  imports: [FormsModule, MatFormFieldModule, MatButtonModule, MatInputModule],
-  providers: [AuthService, SessionStorageService],
+  imports: [NgIf, FormsModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatSnackBarModule],
+  providers: [AuthService, SessionStorageService, NotificationService],
 })
 export class RegisterComponent {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly router: Router,
+    private readonly notificationService: NotificationService
+  ) {}
 
   isLoading = false;
 
@@ -59,9 +70,20 @@ export class RegisterComponent {
   register() {
     this.isLoading = true;
 
-    this.authService.register({ username: this.username, password: this.password }).subscribe({
-      next: () => this.isLoading = false,
-      error: () => this.isLoading = false
-    })
+    this.authService
+      .register({ username: this.username, password: this.password })
+      .pipe(
+        catchError(() => {
+          console.error(AuthErrorLabel.CouldNotRegister);
+          this.notificationService.openErrorMessage(AuthErrorLabel.CouldNotRegister);
+
+          return of();
+        }),
+        tap(() => {
+          this.isLoading = false;
+          this.router.navigate(['/']);
+        })
+      )
+      .subscribe();
   }
 }
