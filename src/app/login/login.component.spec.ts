@@ -1,21 +1,29 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
+import { HarnessLoader } from '@angular/cdk/testing';
+import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { Spectator, createComponentFactory } from '@ngneat/spectator';
 import { LoginComponent } from './login.component';
 
 describe('LoginComponent', () => {
-  let component: LoginComponent;
-  let fixture: ComponentFixture<LoginComponent>;
+  let s: Spectator<LoginComponent>;
+  let loader: HarnessLoader;
+
+  const createComponent = createComponentFactory({
+    component: LoginComponent,
+    imports: [FormsModule, MatFormFieldModule, MatButtonModule, MatInputModule],
+  });
 
   beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [LoginComponent]
-    });
-    fixture = TestBed.createComponent(LoginComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    s = createComponent();
+
+    loader = TestbedHarnessEnvironment.loader(s.fixture);
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(s.component).toBeTruthy();
   });
 });
