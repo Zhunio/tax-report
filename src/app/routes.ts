@@ -15,12 +15,6 @@ export const routes: Routes = [
   },
   {
     path: 'register',
-    canMatch: [authGuard],
-    loadComponent: () =>
-      import('./register/register.component').then((mod) => mod.RegisterComponent),
-  },
-  {
-    path: 'register',
     loadComponent: () =>
       import('./register/register.component').then((mod) => mod.RegisterComponent),
   },
