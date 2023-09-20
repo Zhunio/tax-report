@@ -1,16 +1,17 @@
+import { NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { catchError, of, tap } from 'rxjs';
+
 import { AuthErrorLabel } from '../shared/services/auth/auth.enum';
 import { AuthService } from '../shared/services/auth/auth.service';
 import { NotificationService } from '../shared/services/notification/notification.service';
 import { SessionStorageService } from '../shared/services/session-storage/session-storage.service';
-import { NgIf } from '@angular/common';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
@@ -52,7 +53,14 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
       }
     `,
   ],
-  imports: [NgIf, FormsModule, MatFormFieldModule, MatButtonModule, MatInputModule, MatSnackBarModule],
+  imports: [
+    NgIf,
+    FormsModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatInputModule,
+    MatSnackBarModule,
+  ],
   providers: [AuthService, SessionStorageService, NotificationService],
 })
 export class RegisterComponent {
