@@ -1,24 +1,26 @@
 import { environment } from '@/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AuthResponse, Login, Register } from './auth.model';
 import { tap } from 'rxjs';
+import { SessionStorageService } from '../session-storage/session-storage.service';
+import { AuthResponse, Login, Register } from './auth.model';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly http: HttpClient) {}
+  constructor(
+    private readonly http: HttpClient,
+    private readonly sessionStorage: SessionStorageService
+  ) {}
 
   register(register: Register) {
-    return this.http.post<AuthResponse>(`${environment.baseUrl}/register`, register).pipe(
-      tap(({ access_token }) => sessionStorage.setItem('auth', access_token))
-    )
+    return this.http
+      .post<AuthResponse>(`${environment.baseUrl}/register`, register)
+      .pipe(tap(({ access_token }) => this.sessionStorage.set('access_token', access_token)));
   }
 
   login(login: Login) {
-    return this.http.post<AuthResponse>(`${environment.baseUrl}/login`, login);
-  }
-
-  private saveAccessTokenInSessionStorage() {
-    
+    return this.http
+      .post<AuthResponse>(`${environment.baseUrl}/login`, login)
+      .pipe(tap(({ access_token }) => this.sessionStorage.set('access_token', access_token)));
   }
 }
