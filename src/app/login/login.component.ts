@@ -10,7 +10,6 @@ import { SessionStorageService } from '../shared/services/session-storage/sessio
   selector: 'app-login',
   standalone: true,
   template: `
-    <!-- <div class="grid grid-cols-1 gap-3"> -->
     <!-- USERNAME -->
     <mat-form-field>
       <mat-label>Username</mat-label>
@@ -33,7 +32,6 @@ import { SessionStorageService } from '../shared/services/session-storage/sessio
     >
       Login
     </button>
-    <!-- </div> -->
   `,
   styles: [
     `
@@ -48,7 +46,7 @@ import { SessionStorageService } from '../shared/services/session-storage/sessio
     `,
   ],
   imports: [FormsModule, MatFormFieldModule, MatButtonModule, MatInputModule],
-  providers: [AuthService, SessionStorageService]
+  providers: [AuthService, SessionStorageService],
 })
 export class LoginComponent {
   constructor(private readonly authService: AuthService) {}
