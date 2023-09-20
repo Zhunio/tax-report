@@ -6,7 +6,7 @@ describe('SessionStorageService', () => {
   let service: SessionStorageService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({ providers: [SessionStorageService] });
     service = TestBed.inject(SessionStorageService);
   });
 
