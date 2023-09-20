@@ -14,13 +14,13 @@ export class AuthService {
 
   register(register: Register) {
     return this.http
-      .post<AuthResponse>(`${environment.baseUrl}/register`, register)
+      .post<AuthResponse>(`${environment.baseUrl}/auth/register`, register)
       .pipe(tap(({ access_token }) => this.sessionStorage.set('access_token', access_token)));
   }
 
   login(login: Login) {
     return this.http
-      .post<AuthResponse>(`${environment.baseUrl}/login`, login)
+      .post<AuthResponse>(`${environment.baseUrl}/auth/login`, login)
       .pipe(tap(({ access_token }) => this.sessionStorage.set('access_token', access_token)));
   }
 }

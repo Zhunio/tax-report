@@ -28,7 +28,7 @@ describe('AuthService', () => {
 
       s.service.register({ username: 'john', password: 'abcde' }).subscribe();
 
-      expect(mockHttp.post).toHaveBeenCalledWith(`${environment.baseUrl}/register`, {
+      expect(mockHttp.post).toHaveBeenCalledWith(`${environment.baseUrl}/auth/register`, {
         username: 'john',
         password: 'abcde',
       });
@@ -49,7 +49,7 @@ describe('AuthService', () => {
 
       s.service.login({ username: 'john', password: 'abcde' }).subscribe();
 
-      expect(mockHttp.post).toHaveBeenCalledWith(`${environment.baseUrl}/login`, {
+      expect(mockHttp.post).toHaveBeenCalledWith(`${environment.baseUrl}/auth/login`, {
         username: 'john',
         password: 'abcde',
       });
