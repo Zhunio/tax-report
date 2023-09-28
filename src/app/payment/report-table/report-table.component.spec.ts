@@ -52,6 +52,18 @@ describe('ReportTableComponent', () => {
     page.expectToBeEmpty();
   });
 
+  it('should show loading indicator', () => {
+    isLoading.set(true);
+    s.detectChanges();
+
+    expect(page.getLoadingText()).toBeVisible();
+
+    isLoading.set(false);
+    s.detectChanges();
+      
+      expect(page.getLoadingText()).not.toBeVisible();
+  })
+
   it('should render table with exempt payments', () => {
     const paymentDtos: PaymentDto[] = [
       {

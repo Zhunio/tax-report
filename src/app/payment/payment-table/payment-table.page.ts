@@ -1,10 +1,19 @@
 import { MatCheckbox } from '@angular/material/checkbox';
+import { MatProgressBar } from '@angular/material/progress-bar';
 import { Spectator, byText } from '@ngneat/spectator';
 import { Payment } from '../payment.model';
 import { PaymentTableComponent } from './payment-table.component';
 
 export class PaymentTablePage {
   constructor(private readonly s: Spectator<PaymentTableComponent>) {}
+
+  getLoadingProgressBar() {
+    return this.s.query(MatProgressBar);
+  }
+
+  getLoadingText() {
+    return this.s.query(byText('Loading...'));
+  }
 
   getEmptyRowsLabel() {
     return this.s.query(byText('No rows to show'), { root: true });

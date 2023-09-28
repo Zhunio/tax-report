@@ -137,6 +137,21 @@ describe('PaymentTableComponent', () => {
 
     page.expectToBeEmpty();
   });
+
+  it('should show loading indicator', () => {
+    isLoading.set(true);
+    s.detectChanges();
+
+    expect(page.getLoadingProgressBar()).toBeVisible();
+    expect(page.getLoadingText()).toBeVisible();
+
+    isLoading.set(false);
+    s.detectChanges();
+    
+    expect(page.getLoadingProgressBar()).not.toBeVisible();
+    expect(page.getLoadingText()).not.toBeVisible();
+  })
+
   it('should render table with rows', () => {
     const paymentDto: PaymentDto = {
       id: 1,

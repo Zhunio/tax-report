@@ -4,9 +4,18 @@ import { TaxReportDto } from '@/app/shared/services/api/api.model';
 import { TaxReportCreateDialogResult } from '@/app/tax-report-dialog/tax-report-dialog.model';
 import { TaxReportComponent } from './tax-report.component';
 import { TaxReportErrorLabel } from './tax-report.enum';
+import { MatProgressBar } from '@angular/material/progress-bar';
 
 export class TaxReportShellPage {
   constructor(private s: Spectator<TaxReportComponent>) {}
+
+  getLoadingProgressBar() {
+    return this.s.query(MatProgressBar);
+  }
+
+  getLoadingText() {
+    return this.s.query(byText('Loading...'));
+  }
 
   getEmptyRowsLabel() {
     return this.s.query(byText('No rows to show'), { root: true });

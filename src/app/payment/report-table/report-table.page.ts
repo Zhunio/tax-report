@@ -6,6 +6,10 @@ import { ReportTableComponent } from './report-table.component';
 export class ReportTablePage {
   constructor(private readonly s: Spectator<ReportTableComponent>) {}
 
+  getLoadingText() {
+    return this.s.query(byText('Loading...'));
+  }
+
   getEmptyRowsLabel() {
     return this.s.query(byText('No rows to show'), { root: true });
   }
