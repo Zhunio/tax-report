@@ -26,7 +26,13 @@ import { SessionStorageService } from '../shared/services/session-storage/sessio
     <!-- PASSWORD -->
     <mat-form-field>
       <mat-label>Password</mat-label>
-      <input type="password" matInput [(ngModel)]="password" placeholder="doe" />
+      <input
+        type="password"
+        matInput
+        [(ngModel)]="password"
+        placeholder="doe"
+        (keyup.enter)="login()"
+      />
     </mat-form-field>
 
     <!-- LOGIN -->
