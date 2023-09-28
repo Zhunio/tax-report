@@ -8,6 +8,7 @@ import { AppComponent } from '@/app/app.component';
 import { routes } from '@/app/routes';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { environment } from './environments/environment';
+import { SessionStorageService } from './app/shared/services/session-storage/session-storage.service';
 
 if (environment.production) {
   enableProdMode();
@@ -15,6 +16,7 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
   providers: [
+    SessionStorageService,
     { provide: LocationStrategy, useClass: HashLocationStrategy },
     importProvidersFrom(HttpClientModule, BrowserAnimationsModule),
     provideRouter(routes),
