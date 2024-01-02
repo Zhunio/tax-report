@@ -15,27 +15,9 @@ jobs:
     name: Build
     uses: ./.github/workflows/build.yml
 
-  deploy-dev:
-    name: Development
+  deploy:
+    name: Deploy
     needs: build
-    if: |
-      github.ref == 'refs/heads/main' || 
-      github.ref == 'refs/heads/develop' ||
-      github.base_ref == 'main' ||
-      github.base_ref == 'develop'
-    secrets: inherit
-    with:
-      environment: Development
-      environmentUrl: https://tax-report-dev.zhunio-app.com
-    uses: ./.github/workflows/deploy.yml
-
-  deploy-prod:
-    name: Production
-    needs: deploy-dev
     if: github.ref == 'refs/heads/main'
     secrets: inherit
-    with:
-      environment: Production
-      environmentUrl: https://tax-report.zhunio-app.com
     uses: ./.github/workflows/deploy.yml
-    

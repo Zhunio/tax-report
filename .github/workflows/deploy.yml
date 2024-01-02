@@ -1,22 +1,10 @@
 on:
   workflow_call:
-    inputs:
-      environment:
-        description: "The environment"
-        type: string
-        required: true
-      environmentUrl:
-        description: "The environment url"
-        type: string
-        required: true
 
 jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ inputs.environment }}
-      url: ${{ inputs.environmentUrl }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -29,13 +17,7 @@ jobs:
         run: npm ci
 
       - name: Build app
-        run: |
-          if [[ ${{ inputs.environment  }} == "Production" ]]
-          then
-            npm run build:prod
-          else
-            npm run build:dev
-          fi
+        run: npm run build:prod
 
       - name: SCP to server & Deploy app
         uses: appleboy/scp-action@master
@@ -43,7 +25,6 @@ jobs:
           host: ${{ secrets.TAX_REPORT_HOSTNAME }}
           username: ${{ secrets.TAX_REPORT_SSH_USERNAME }}
           password: ${{ secrets.TAX_REPORT_SSH_PASSWORD }}
-          port: ${{ secrets.TAX_REPORT_SSH_PORT }}
           source: "dist/tax-report"
           target: ${{ secrets.TAX_REPORT_DEPLOY_DIRECTORY }}
           rm: true # Remove target folder before upload data
