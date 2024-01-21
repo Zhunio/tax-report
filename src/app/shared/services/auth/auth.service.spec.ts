@@ -22,7 +22,15 @@ describe('AuthService', () => {
     sessionStorage = s.inject(SessionStorageService);
   });
 
-  describe('register', () => {
+  describe('isAuthenticated()', () => {
+    it('should return true when access_token is in session storage', () => {
+      spyOn(sessionStorage, 'get').and.returnValue('abcde');
+
+      expect(s.service.isAuthenticated()).toBeTrue();
+    });
+  });
+
+  describe('register()', () => {
     it('should make `POST /register request`', () => {
       mockHttp.post.and.nextWith({});
 

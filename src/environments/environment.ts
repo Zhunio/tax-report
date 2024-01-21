@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://tax-report-api-dev.zhunio-app.com',
+  baseUrl: 'http://localhost:3000',
 };
 
 /*

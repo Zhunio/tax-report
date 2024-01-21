@@ -23,4 +23,8 @@ export class SessionStorageService {
 
     return value ? (JSON.parse(value) as Value) : null;
   }
+
+  remove<Key extends SessionStorageKey>(key: Key): void {
+    sessionStorage.removeItem(key);
+  }
 }
