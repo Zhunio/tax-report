@@ -12,6 +12,10 @@ export class AuthService {
     private readonly sessionStorage: SessionStorageService
   ) {}
 
+  isAuthenticated(): boolean {
+    return !!this.sessionStorage.get('access_token');
+  }
+
   register(register: Register) {
     return this.http
       .post<AuthResponse>(`${environment.baseUrl}/auth/register`, register)
@@ -22,5 +26,9 @@ export class AuthService {
     return this.http
       .post<AuthResponse>(`${environment.baseUrl}/auth/login`, login)
       .pipe(tap(({ access_token }) => this.sessionStorage.set('access_token', access_token)));
+  }
+  
+  logout() {
+    this.sessionStorage.remove('access_token')
   }
 }

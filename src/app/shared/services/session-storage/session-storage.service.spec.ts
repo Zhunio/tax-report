@@ -27,4 +27,11 @@ describe('SessionStorageService', () => {
 
     expect(service.get('access_token')).toEqual('abcdef');
   });
+
+  it('should remove key from session storage', () => {
+    service.set('access_token', 'abcde');
+    service.remove('access_token');
+
+    expect(sessionStorage.getItem('access_token')).toEqual(null);
+  });
 });
