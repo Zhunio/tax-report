@@ -36,4 +36,8 @@ export class ApiService {
   deleteTaxReport(taxReportId: number) {
     return this.http.delete<TaxReportDto>(`${environment.baseUrl}/tax-report/${taxReportId}`);
   }
+
+  emailTaxReport(taxReportId: number) {
+    return this.http.post<void>(`${environment.baseUrl}/tax-report/email/${taxReportId}`, {});
+  }
 }

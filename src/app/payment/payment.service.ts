@@ -47,4 +47,14 @@ export class PaymentService {
       finalize(() => this.isLoading.set(false))
     );
   }
+
+  emailTaxReport() {
+    this.isLoading.set(true);
+
+    return this._taxReportId$.pipe(
+      switchMap((taxReportId) => this.apiService.emailTaxReport(taxReportId!)),
+      switchMap(() => this.reloadTaxReport()),
+      finalize(() => this.isLoading.set(false))
+    );
+  }
 }
