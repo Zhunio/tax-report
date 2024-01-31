@@ -15,6 +15,10 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.sessionStorage.get('access_token');
   }
+  
+  getAuthToken() {
+    return this.sessionStorage.get('access_token');
+  }
 
   register(register: Register) {
     return this.http

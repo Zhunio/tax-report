@@ -11,7 +11,6 @@ import { catchError, of, tap } from 'rxjs';
 import { AuthErrorLabel } from '../shared/services/auth/auth.enum';
 import { AuthService } from '../shared/services/auth/auth.service';
 import { NotificationService } from '../shared/services/notification/notification.service';
-import { SessionStorageService } from '../shared/services/session-storage/session-storage.service';
 
 @Component({
   selector: 'app-register',
@@ -61,7 +60,7 @@ import { SessionStorageService } from '../shared/services/session-storage/sessio
     MatInputModule,
     MatSnackBarModule,
   ],
-  providers: [AuthService, SessionStorageService, NotificationService],
+  providers: [NotificationService],
 })
 export class RegisterComponent {
   constructor(
