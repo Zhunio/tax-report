@@ -38,7 +38,6 @@ import { AuthService } from './shared/services/auth/auth.service';
     `,
   ],
   imports: [NgIf, MatToolbarModule, MatButtonModule, MatIconModule, RouterModule],
-  providers: [AuthService],
 })
 export class AppComponent {
   router = inject(Router);

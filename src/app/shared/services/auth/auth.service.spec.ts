@@ -29,6 +29,20 @@ describe('AuthService', () => {
       expect(s.service.isAuthenticated()).toBeTrue();
     });
   });
+  
+  describe('getAuthToken()', () => {
+    it('should return the access token when user is authenticated', () => {
+      spyOn(sessionStorage, 'get').and.returnValue('abcde');
+
+      expect(s.service.getAuthToken()).toEqual('abcde');
+    });
+
+    it('should return null when user is not authenticated', () => {
+      spyOn(sessionStorage, 'get').and.returnValue(null);
+
+      expect(s.service.getAuthToken()).toEqual(null);
+    });
+  });
 
   describe('register()', () => {
     it('should make `POST /register request`', () => {

@@ -130,17 +130,18 @@ describe('TaxReportComponent', () => {
 
       const dialogRef = createSpyFromClass(MatDialogRef);
       dialogSpy.open.and.returnValue(dialogRef);
+      const afterClosed = dialogRef.afterClosed.and.returnSubject();
+      const createTaxReport = apiServiceSpy.createTaxReport.and.returnSubject();
 
       page.clickCreateTaxReport();
 
-      // page should be loading since create tax report button was just clicked
       expect(page.getLoadingProgressBar()).toBeVisible();
       expect(page.getLoadingText()).toBeVisible();
 
       const dialogResult = getMockTaxReportCreateDialogResult();
+      afterClosed.next(dialogResult);
       const [taxReport] = getMockTaxReports();
-      dialogRef.afterClosed.and.nextWith(dialogResult);
-      apiServiceSpy.createTaxReport.and.nextWith(taxReport);
+      createTaxReport.next([taxReport]);
       apiServiceSpy.getTaxReports.and.nextWith([taxReport]);
 
       s.detectChanges();
@@ -217,13 +218,13 @@ describe('TaxReportComponent', () => {
     it('should show loading indicator', () => {
       const [taxReport] = getMockTaxReports();
       apiServiceSpy.getTaxReports.and.nextWith([taxReport]);
+      const deleteTaxReport = apiServiceSpy.deleteTaxReport.and.returnSubject();
 
       s.detectChanges();
 
       page.clickRowDeleteButton(0);
 
-      // make api call to delete tax report
-      apiServiceSpy.deleteTaxReport.and.nextWith(taxReport);
+      deleteTaxReport.next(taxReport);
 
       expect(page.getLoadingProgressBar()).toBeVisible();
 
